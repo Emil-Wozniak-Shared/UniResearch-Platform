@@ -11,8 +11,8 @@ fun Application.module() {
     configureSecurity()
     configureMonitoring()
     configureTemplating()
-    configureDatabases()
     configureFrameworks()
+    configureDatabases()
     configureSockets()
     configureRouting()
 }

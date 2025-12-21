@@ -7,7 +7,7 @@ import org.jetbrains.exposed.sql.Table
 import java.util.UUID
 
 object Buildings : Table("building") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 255)
     val address = varchar("address", 255)
     val locationId = uuid("location_id").references(Locations.id)

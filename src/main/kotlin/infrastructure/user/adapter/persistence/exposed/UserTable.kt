@@ -5,7 +5,7 @@ import org.jetbrains.exposed.sql.Table
 import java.util.UUID
 
 object Users : Table("user") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val username = varchar("username", 50).uniqueIndex()
     val email = varchar("email", 100).uniqueIndex()
     val passwordHash = varchar("password_hash", 255)

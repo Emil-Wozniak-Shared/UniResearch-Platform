@@ -1,23 +1,28 @@
 package pl.ejdev
 
+import io.ktor.http.HttpStatusCode.Companion.Created
 import io.ktor.http.HttpStatusCode.Companion.InternalServerError
-import io.ktor.serialization.kotlinx.json.json
+import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
-import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.openapi.*
 import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.netty.handler.codec.DefaultHeaders
 import kotlinx.serialization.json.Json
+import org.koin.ktor.ext.inject
+import pl.ejdev.common.Pageable
+import pl.ejdev.common.SortDirection
+import pl.ejdev.infrastructure.agency.adapter.`in`.http.AgencyHttpHandler
+import java.util.*
 
 fun Application.configureRouting() {
     install(ContentNegotiation) {
-          json(Json {
-              prettyPrint = true
-              ignoreUnknownKeys = true
-          })
+        json(Json {
+            prettyPrint = true
+            ignoreUnknownKeys = true
+        })
     }
     install(RequestValidation) {
         validate<String> { bodyText ->
@@ -30,6 +35,8 @@ fun Application.configureRouting() {
         exception<Throwable> { call, cause -> call.respondText(text = "500: $cause", status = InternalServerError) }
     }
     routing {
+        val agencyHttpHandler: AgencyHttpHandler by inject()
+
         openAPI(path = "openapi")
         route("/api") {
             route("/locations") {
@@ -37,169 +44,151 @@ fun Application.configureRouting() {
                     call.respondText("List all locations")
                 }
                 get("/{id}") {
-                    val id = call.parameters["id"]; call.respondText("Missing id")
+                    val id = call.respondText("Missing id")
                     call.respondText("Get location with id $id")
                 }
                 post {
                     call.respondText("Create location")
                 }
                 put("/{id}") {
-                    val id = call.parameters["id"]; call.respondText("Missing id")
+                    val id = call.respondText("Missing id")
                     call.respondText("Update location $id")
                 }
                 delete("/{id}") {
-                    val id = call.parameters["id"]; call.respondText("Missing id")
+                    val id = call.respondText("Missing id")
                     call.respondText("Delete location $id")
                 }
             }
             route("/scientific/fields") {
                 get { call.respondText("List all scientific fields") }
                 get("/{id}") {
-                    val id = call.parameters["id"]
+                    val id = call.id
                     call.respondText("Missing id"); call.respondText("Get scientific field $id")
                 }
                 post { call.respondText("Create scientific field") }
                 put("/{id}") {
-                    val id = call.parameters["id"]
+                    val id = call.id
                     call.respondText("Missing id"); call.respondText("Update scientific field $id")
                 }
                 delete("/{id}") {
-                    val id = call.parameters["id"]
+                    val id = call.id
                     call.respondText("Missing id"); call.respondText("Delete scientific field $id")
                 }
             }
             route("/agencies") {
-                get { call.respondText("List all agencies") }
-                get("/{id}") {
-                    val id = call.parameters["id"]
-                    call.respondText("Missing id"); call.respondText("Get agency $id")
-                }
-                post { call.respondText("Create agency") }
-                put("/{id}") {
-                    val id = call.parameters["id"]
-                    call.respondText("Missing id"); call.respondText("Update agency $id")
-                }
-                delete("/{id}") {
-                    val id = call.parameters["id"]
-                    call.respondText("Missing id"); call.respondText("Delete agency $id")
-                }
+                get { call.respond(agencyHttpHandler.list(call)) }
+                get("/{id}") { call.respond(agencyHttpHandler.find(call)) }
+                post { call.respond(Created, agencyHttpHandler.create(call)) }
+                put("/{id}") { call.respond(agencyHttpHandler.update(call)) }
+                delete("/{id}") { call.respond(agencyHttpHandler.delete(call)) }
             }
             route("/universities") {
                 get { call.respondText("List all universities") }
                 get("/{id}") {
-                    val id = call.parameters["id"]
+                    val id = call.id
                     call.respondText("Missing id"); call.respondText("Get university $id")
                 }
                 post { call.respondText("Create university") }
                 put("/{id}") {
-                    val id = call.parameters["id"]
+                    val id = call.id
                     call.respondText("Missing id"); call.respondText("Update university $id")
                 }
                 delete("/{id}") {
-                    val id = call.parameters["id"]
+                    val id = call.id
                     call.respondText("Missing id"); call.respondText("Delete university $id")
                 }
             }
             route("/institutes") {
                 get { call.respondText("List all institutes") }
-                get("/{id}") {
-                    val id = call.parameters["id"]
-                    call.respondText("Missing id"); call.respondText("Get institute $id")
-                }
+                get("/{id}") { call.respondText("Get institute ${call.id}") }
                 post { call.respondText("Create institute") }
-                put("/{id}") {
-                    val id = call.parameters["id"]
-                    call.respondText("Missing id"); call.respondText("Update institute $id")
-                }
-                delete("/{id}") {
-                    val id = call.parameters["id"]
-                    call.respondText("Missing id"); call.respondText("Delete institute $id")
-                }
+                put("/{id}") { call.respondText("Update institute ${call.id}") }
+                delete("/{id}") { call.respondText("Delete institute ${call.id}") }
             }
             route("/researchers") {
                 route("/programs") {
                     get { call.respondText("List all research programs") }
                     get("/{id}") {
-                        val id = call.parameters["id"]
+                        val id = call.id
                         call.respondText("Missing id"); call.respondText("Get research program $id")
                     }
                     post { call.respondText("Create research program") }
                     put("/{id}") {
-                        val id = call.parameters["id"]
+                        val id = call.id
                         call.respondText("Missing id"); call.respondText("Update research program $id")
                     }
                     delete("/{id}") {
-                        val id = call.parameters["id"]
+                        val id = call.id
                         call.respondText("Missing id"); call.respondText("Delete research program $id")
                     }
                 }
                 route("/exchanges") {
                     get { call.respondText("List all researcher exchanges") }
                     get("/{id}") {
-                        val id = call.parameters["id"]
+                        val id = call.id
                         call.respondText("Missing id"); call.respondText("Get researcher exchange $id")
                     }
                     post { call.respondText("Create researcher exchange") }
                     put("/{id}") {
-                        call.parameters["id"]; call.respondText("Update researcher exchange ${call.parameters["id"]}")
+                        call.respondText("Update researcher exchange ${call.id}")
                     }
                     delete("/{id}") {
-                        call.parameters["id"]; call.respondText("Delete researcher exchange ${call.parameters["id"]}")
+                        call.respondText("Delete researcher exchange ${call.id}")
                     }
                 }
                 get { call.respondText("List all researchers") }
                 get("/{id}") {
-                    val id = call.parameters["id"]
+                    val id = call.id
                     call.respondText("Missing id"); call.respondText("Get researcher $id")
                 }
                 post { call.respondText("Create researcher") }
                 put("/{id}") {
-                    val id = call.parameters["id"]
+                    val id = call.id
                     call.respondText("Missing id"); call.respondText("Update researcher $id")
                 }
                 delete("/{id}") {
-                    val id = call.parameters["id"]; call.respondText("Delete researcher $id")
+                    call.respondText("Delete researcher ${call.id}")
                 }
             }
             route("/buildings") {
                 get { call.respondText("List all buildings") }
                 get("/{id}") {
-                    val id = call.parameters["id"]
+                    val id = call.id
                     call.respondText("Missing id"); call.respondText("Get building $id")
                 }
                 post { call.respondText("Create building") }
-                put("/{id}") { call.parameters["id"]; call.respondText("Update building ${call.parameters["id"]}") }
-                delete("/{id}") { call.parameters["id"]; call.respondText("Delete building ${call.parameters["id"]}") }
+                put("/{id}") { call.respondText("Update building ${call.id}") }
+                delete("/{id}") { call.respondText("Delete building ${call.id}") }
             }
             route("/rooms") {
                 get { call.respondText("List all rooms") }
                 get("/{id}") {
                     val id =
-                        call.parameters["id"]; call.respondText("Missing id"); call.respondText("Get room $id")
+                        call.respondText("Missing id"); call.respondText("Get room $id")
                 }
                 post { call.respondText("Create room") }
-                put("/{id}") { call.parameters["id"]; call.respondText("Update room ${call.parameters["id"]}") }
-                delete("/{id}") { call.parameters["id"]; call.respondText("Delete room ${call.parameters["id"]}") }
+                put("/{id}") { call.respondText("Update room ${call.id}") }
+                delete("/{id}") { call.respondText("Delete room ${call.id}") }
             }
             route("/equipment") {
                 get { call.respondText("List all equipment") }
                 get("/{id}") {
-                    val id = call.parameters["id"]
+                    val id = call.id
                     call.respondText("Missing id"); call.respondText("Get equipment $id")
                 }
                 post { call.respondText("Create equipment") }
-                put("/{id}") { call.parameters["id"]; call.respondText("Update equipment ${call.parameters["id"]}") }
-                delete("/{id}") { call.parameters["id"]; call.respondText("Delete equipment ${call.parameters["id"]}") }
+                put("/{id}") { call.respondText("Update equipment ${call.id}") }
+                delete("/{id}") { call.respondText("Delete equipment ${call.id}") }
             }
             route("/reagents") {
                 get { call.respondText("List all reagents") }
                 get("/{id}") {
-                    val id = call.parameters["id"]
+                    val id = call.id
                     call.respondText("Missing id"); call.respondText("Get reagent $id")
                 }
                 post { call.respondText("Create reagent") }
-                put("/{id}") { call.parameters["id"]; call.respondText("Update reagent ${call.parameters["id"]}") }
-                delete("/{id}") { call.parameters["id"]; call.respondText("Delete reagent ${call.parameters["id"]}") }
+                put("/{id}") { call.respondText("Update reagent ${call.id}") }
+                delete("/{id}") { call.respondText("Delete reagent ${call.id}") }
             }
             route("/users") {
                 route("/roles") {
@@ -212,11 +201,11 @@ fun Application.configureRouting() {
                 get { call.respondText("List all users") }
                 get("/{id}") {
                     val id =
-                        call.parameters["id"]; call.respondText("Missing id"); call.respondText("Get user $id")
+                        call.respondText("Missing id"); call.respondText("Get user $id")
                 }
                 post { call.respondText("Create user") }
-                put("/{id}") { call.parameters["id"]; call.respondText("Update user ${call.parameters["id"]}") }
-                delete("/{id}") { call.parameters["id"]; call.respondText("Delete user ${call.parameters["id"]}") }
+                put("/{id}") { call.respondText("Update user ${call.id}") }
+                delete("/{id}") { call.respondText("Delete user ${call.id}") }
             }
             route("/roles") {
                 route("/permissions") {
@@ -229,22 +218,22 @@ fun Application.configureRouting() {
                 get { call.respondText("List all roles") }
                 get("/{id}") {
                     val id =
-                        call.parameters["id"]; call.respondText("Missing id"); call.respondText("Get role $id")
+                        call.respondText("Missing id"); call.respondText("Get role $id")
                 }
                 post { call.respondText("Create role") }
-                put("/{id}") { call.parameters["id"]; call.respondText("Update role ${call.parameters["id"]}") }
-                delete("/{id}") { call.parameters["id"]; call.respondText("Delete role ${call.parameters["id"]}") }
+                put("/{id}") { call.respondText("Update role ${call.id}") }
+                delete("/{id}") { call.respondText("Delete role ${call.id}") }
             }
             route("/permissions") {
                 get { call.respondText("List all permissions") }
                 get("/{id}") {
-                    val id = call.parameters["id"]
+                    val id = call.id
                     call.respondText("Missing id"); call.respondText("Get permission $id")
                 }
                 post { call.respondText("Create permission") }
-                put("/{id}") { call.parameters["id"]; call.respondText("Update permission ${call.parameters["id"]}") }
+                put("/{id}") { call.respondText("Update permission ${call.id}") }
                 delete("/{id}") {
-                    call.parameters["id"]; call.respondText("Delete permission ${call.parameters["id"]}")
+                    call.respondText("Delete permission ${call.id}")
                 }
             }
             route("/publications") {
@@ -257,13 +246,13 @@ fun Application.configureRouting() {
                 }
                 get { call.respondText("List all publications") }
                 get("/{id}") {
-                    val id = call.parameters["id"]
+                    val id = call.id
                     call.respondText("Missing id"); call.respondText("Get publication $id")
                 }
                 post { call.respondText("Create publication") }
-                put("/{id}") { call.parameters["id"]; call.respondText("Update publication ${call.parameters["id"]}") }
+                put("/{id}") { call.respondText("Update publication ${call.id}") }
                 delete("/{id}") {
-                    call.parameters["id"]; call.respondText("Delete publication ${call.parameters["id"]}")
+                    call.respondText("Delete publication ${call.id}")
                 }
             }
             route("/grants") {
@@ -285,13 +274,31 @@ fun Application.configureRouting() {
 
                 get { call.respondText("List all grants") }
                 get("/{id}") {
-                    val id = call.parameters["id"]
+                    val id = call.id
                     call.respondText("Missing id"); call.respondText("Get grant $id")
                 }
                 post { call.respondText("Create grant") }
-                put("/{id}") { call.parameters["id"]; call.respondText("Update grant ${call.parameters["id"]}") }
-                delete("/{id}") { call.parameters["id"]; call.respondText("Delete grant ${call.parameters["id"]}") }
+                put("/{id}") { call.respondText("Update grant ${call.id}") }
+                delete("/{id}") { call.respondText("Delete grant ${call.id}") }
             }
         }
     }
+}
+
+val RoutingCall.id: UUID
+    get() {
+        val id = parameters["id"] ?: error("Missing id")
+        return UUID.fromString(id)
+    }
+
+fun ApplicationCall.toPageable(): Pageable {
+    val page = this.request.queryParameters["page"]?.toIntOrNull() ?: 0
+    val size = this.request.queryParameters["size"]?.toIntOrNull() ?: 20
+    val sortBy = this.request.queryParameters["sortBy"]
+    val sortDir = when (this.request.queryParameters["sortDir"]?.uppercase()) {
+        "DESC" -> SortDirection.DESC
+        else -> SortDirection.ASC
+    }
+
+    return Pageable(page = page, size = size, sortBy = sortBy, sortDir = sortDir)
 }

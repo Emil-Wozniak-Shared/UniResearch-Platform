@@ -1,8 +1,9 @@
 package infrastructure.agency.model.result
 
 import domain.agency.AgencyEntity
-import java.util.UUID
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class UpdateAgencyResult(
-    val entity: domain.agency.AgencyEntity
+    val entity: AgencyEntity
 )

@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.kotlin.datetime.date
 import java.util.UUID
 
 object Publications : Table("publication") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val title = varchar("title", 500)
     val abstract = text("abstract").nullable()
     val publicationType = varchar("publication_type", 50)

@@ -1,9 +1,9 @@
 package infrastructure.agency.model.command
 
 import domain.agency.AgencyEntity
-import pl.ejdev.common.Pageable
-import java.util.UUID
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class CreateAgencyCommand(
-    val entity: domain.agency.AgencyEntity
+    val entity: AgencyEntity
 )

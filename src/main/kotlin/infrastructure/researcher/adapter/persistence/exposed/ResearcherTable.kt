@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.Table
 import java.util.UUID
 
 object Researchers : Table("researcher") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val firstName = varchar("first_name", 100)
     val lastName = varchar("last_name", 100)
     val degree = varchar("degree", 50)

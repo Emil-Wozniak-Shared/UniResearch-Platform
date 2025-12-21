@@ -1,9 +1,10 @@
 package infrastructure.agency.model.command
 
-import domain.agency.AgencyEntity
-import pl.ejdev.common.Pageable
-import java.util.UUID
+import kotlinx.serialization.Serializable
+import pl.ejdev.infrastructure.utils.serializer.UUIDSerializer
 
+@Serializable
 data class FindAgencyCommand(
+    @Serializable(with = UUIDSerializer::class)
     val id: java.util.UUID
 )

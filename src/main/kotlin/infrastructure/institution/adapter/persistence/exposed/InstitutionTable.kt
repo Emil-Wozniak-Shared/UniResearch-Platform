@@ -4,7 +4,7 @@ import org.jetbrains.exposed.sql.Table
 
 object Institutions : Table("institution") {
 
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
 
     override val primaryKey: PrimaryKey = PrimaryKey(id)
 }

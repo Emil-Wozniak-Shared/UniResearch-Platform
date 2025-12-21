@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.kotlin.datetime.date
 import java.util.UUID
 
 object ResearcherExchanges : Table("researcher_exchange") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val researcherId = uuid("researcher_id").references(Researchers.id)
     val hostUniversityId = uuid("host_university_id").references(Universities.id)
     val hostInstituteId = uuid("host_institute_id").references(Institutes.id)

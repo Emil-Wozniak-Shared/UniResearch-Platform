@@ -12,7 +12,7 @@ import org.jetbrains.exposed.sql.kotlin.datetime.date
 import java.util.UUID
 
 object Locations : Table("location") {
-    val id = uuid("id").autoIncrement().autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 100)
     val type = varchar("type", 50)
     val parentLocationId = uuid("parent_location_id").references(Locations.id)
@@ -26,7 +26,7 @@ import org.jetbrains.exposed.sql.Table
 import java.util.UUID
 
 object ScientificFields : Table("scientific_field") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 100)
     val description = varchar("description", 255).nullable()
     override val primaryKey: PrimaryKey = PrimaryKey(id)
@@ -39,7 +39,7 @@ import org.jetbrains.exposed.sql.Table
 import java.util.UUID
 
 object Agencies : Table("agency") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 255)
     val type = varchar("type", 50)
     val activity = varchar("activity", 255)
@@ -53,7 +53,7 @@ import org.jetbrains.exposed.sql.Table
 import java.util.UUID
 
 object Universities : Table("university") {
-    val id = uuid("id").autoIncrement().autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 255)
     val type = varchar("type", 50)
     val locationId = uuid("location_id").references(Locations.id)
@@ -69,7 +69,7 @@ import org.jetbrains.exposed.sql.Table
 import java.util.UUID
 
 object Institutes : Table("institute") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 255)
     val type = varchar("type", 50)
     val locationId = uuid("location_id").references(Locations.id)
@@ -86,7 +86,7 @@ import org.jetbrains.exposed.sql.Table
 import java.util.UUID
 
 object ResearchPrograms : Table("research_program") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 255)
     val type = varchar("type", 50)
     val instituteId = uuid("institute_id").references(Institutes.id)
@@ -101,7 +101,7 @@ import org.jetbrains.exposed.sql.Table
 import java.util.UUID
 
 object Researchers : Table("researcher") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val firstName = varchar("first_name", 100)
     val lastName = varchar("last_name", 100)
     val degree = varchar("degree", 50)
@@ -117,7 +117,7 @@ import org.jetbrains.exposed.sql.Table
 import java.util.UUID
 
 object Buildings : Table("building") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 255)
     val address = varchar("address", 255)
     val locationId = uuid("location_id").references(Locations.id)
@@ -134,7 +134,7 @@ import org.jetbrains.exposed.sql.Table
 import java.util.UUID
 
 object Rooms : Table("room") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val number = varchar("number", 50)
     val type = varchar("type", 50)
     val buildingId = uuid("building_id").references(Buildings.id)
@@ -149,7 +149,7 @@ import org.jetbrains.exposed.sql.Table
 import java.util.UUID
 
 object Equipment : Table("equipment") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 255)
     val type = varchar("type", 50)
     val roomId = uuid("room_id").references(Rooms.id)
@@ -166,7 +166,7 @@ import org.jetbrains.exposed.sql.kotlin.datetime.date
 import java.util.UUID
 
 object Reagents : Table("reagent") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 255)
     val type = varchar("type", 50)
     val quantity = double("quantity")
@@ -183,7 +183,7 @@ import org.jetbrains.exposed.sql.Table
 import java.util.UUID
 
 object Users : Table("user") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val username = varchar("username", 50).uniqueIndex()
     val email = varchar("email", 100).uniqueIndex()
     val passwordHash = varchar("password_hash", 255)
@@ -198,7 +198,7 @@ import org.jetbrains.exposed.sql.Table
 import java.util.UUID
 
 object Roles : Table("role") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 50)
     val description = varchar("description", 255).nullable()
     override val primaryKey: PrimaryKey = PrimaryKey(id)
@@ -211,7 +211,7 @@ import org.jetbrains.exposed.sql.Table
 import java.util.UUID
 
 object Permissions : Table("permission") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 100)
     val description = varchar("description", 255).nullable()
     override val primaryKey: PrimaryKey = PrimaryKey(id)
@@ -249,7 +249,7 @@ import org.jetbrains.exposed.sql.kotlin.datetime.date
 import java.util.UUID
 
 object ResearcherExchanges : Table("researcher_exchange") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val researcherId = uuid("researcher_id").references(Researchers.id)
     val hostUniversityId = uuid("host_university_id").references(Universities.id)
     val hostInstituteId = uuid("host_institute_id").references(Institutes.id)
@@ -268,7 +268,7 @@ import org.jetbrains.exposed.sql.kotlin.datetime.date
 import java.util.UUID
 
 object Publications : Table("publication") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val title = varchar("title", 500)
     val abstract = text("abstract").nullable()
     val publicationType = varchar("publication_type", 50)
@@ -301,7 +301,7 @@ import org.jetbrains.exposed.sql.kotlin.datetime.date
 import java.util.UUID
 
 object Grants : Table("grant") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val title = varchar("title", 500)
     val description = text("description").nullable()
     val grantNumber = varchar("grant_number", 100).uniqueIndex()

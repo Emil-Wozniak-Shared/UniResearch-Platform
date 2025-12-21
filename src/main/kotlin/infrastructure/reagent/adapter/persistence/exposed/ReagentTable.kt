@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.kotlin.datetime.date
 import java.util.UUID
 
 object Reagents : Table("reagent") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 255)
     val type = varchar("type", 50)
     val quantity = double("quantity")

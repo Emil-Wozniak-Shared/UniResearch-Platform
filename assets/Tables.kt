@@ -7,7 +7,7 @@ import org.jetbrains.exposed.sql.kotlin.datetime.date
 // LOCATION
 // ===========================
 object Locations : Table("location") {
-    val id = uuid("id").autoIncrement().autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 100)
     val type = varchar("type", 50) // country / city / campus
     val parentLocationId = uuid("parent_location_id").references(Locations.id)
@@ -19,7 +19,7 @@ object Locations : Table("location") {
 // SCIENTIFIC FIELD
 // ===========================
 object ScientificFields : Table("scientific_field") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 100)
     val description = varchar("description", 255).nullable()
 
@@ -30,7 +30,7 @@ object ScientificFields : Table("scientific_field") {
 // AGENCY
 // ===========================
 object Agencies : Table("agency") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 255)
     val type = varchar("type", 50) // NCN / NCBR / FNP / EU
     val activity = varchar("activity", 255)
@@ -42,7 +42,7 @@ object Agencies : Table("agency") {
 // UNIVERSITY
 // ===========================
 object Universities : Table("university") {
-    val id = uuid("id").autoIncrement().autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 255)
     val type = varchar("type", 50)
     val locationId = uuid("location_id").references(Locations.id)
@@ -56,7 +56,7 @@ object Universities : Table("university") {
 // INSTITUTE
 // ===========================
 object Institutes : Table("institute") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 255)
     val type = varchar("type", 50)
     val locationId = uuid("location_id").references(Locations.id)
@@ -71,7 +71,7 @@ object Institutes : Table("institute") {
 // RESEARCH PROGRAM
 // ===========================
 object ResearchPrograms : Table("research_program") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 255)
     val type = varchar("type", 50)
     val instituteId = uuid("institute_id").references(Institutes.id)
@@ -84,7 +84,7 @@ object ResearchPrograms : Table("research_program") {
 // RESEARCHER
 // ===========================
 object Researchers : Table("researcher") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val firstName = varchar("first_name", 100)
     val lastName = varchar("last_name", 100)
     val degree = varchar("degree", 50)
@@ -95,7 +95,7 @@ object Researchers : Table("researcher") {
 }
 
 object Buildings : Table("building") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 255)
     val address = varchar("address", 255)
     val locationId = uuid("location_id").references(Locations.id)
@@ -107,7 +107,7 @@ object Buildings : Table("building") {
 }
 
 object Rooms : Table("room") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val number = varchar("number", 50)
     val type = varchar("type", 50)
     val buildingId = uuid("building_id").references(Buildings.id)
@@ -117,7 +117,7 @@ object Rooms : Table("room") {
 }
 
 object Equipment : Table("equipment") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 255)
     val type = varchar("type", 50)
     val roomId = uuid("room_id").references(Rooms.id)
@@ -131,7 +131,7 @@ object Equipment : Table("equipment") {
 // REAGENT
 // ===========================
 object Reagents : Table("reagent") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 255)
     val type = varchar("type", 50)
     val quantity = double("quantity")
@@ -146,7 +146,7 @@ object Reagents : Table("reagent") {
 // USER / AUTH
 // ===========================
 object Users : Table("user") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val username = varchar("username", 50).uniqueIndex()
     val email = varchar("email", 100).uniqueIndex()
     val passwordHash = varchar("password_hash", 255)
@@ -156,7 +156,7 @@ object Users : Table("user") {
 }
 
 object Roles : Table("role") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 50)
     val description = varchar("description", 255).nullable()
 
@@ -164,7 +164,7 @@ object Roles : Table("role") {
 }
 
 object Permissions : Table("permission") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val name = varchar("name", 100)
     val description = varchar("description", 255).nullable()
 
@@ -189,7 +189,7 @@ object RolePermissions : Table("role_permission") {
 // RESEARCHER EXCHANGE
 // ===========================
 object ResearcherExchanges : Table("researcher_exchange") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val researcherId = uuid("researcher_id").references(Researchers.id)
     val hostUniversityId = uuid("host_university_id").references(Universities.id)
     val hostInstituteId = uuid("host_institute_id").references(Institutes.id)
@@ -205,7 +205,7 @@ object ResearcherExchanges : Table("researcher_exchange") {
 // PUBLICATION
 // ===========================
 object Publications : Table("publication") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val title = varchar("title", 500)
     val abstract = text("abstract").nullable()
     val publicationType = varchar("publication_type", 50)
@@ -229,7 +229,7 @@ object PublicationAuthors : Table("publication_author") {
 // GRANT
 // ===========================
 object Grants : Table("grant") {
-    val id = uuid("id").autoIncrement()
+    val id = uuid("id")
     val title = varchar("title", 500)
     val description = text("description").nullable()
     val grantNumber = varchar("grant_number", 100).uniqueIndex()

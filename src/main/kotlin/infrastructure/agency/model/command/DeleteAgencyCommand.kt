@@ -1,9 +1,11 @@
 package infrastructure.agency.model.command
 
-import domain.agency.AgencyEntity
-import pl.ejdev.common.Pageable
-import java.util.UUID
+import kotlinx.serialization.Serializable
+import pl.ejdev.infrastructure.utils.serializer.UUIDSerializer
+import java.util.*
 
+@Serializable
 data class DeleteAgencyCommand(
-    val id: java.util.UUID
+    @Serializable(with = UUIDSerializer::class)
+    val id: UUID
 )
