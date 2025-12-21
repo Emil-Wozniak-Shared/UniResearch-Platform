@@ -1,0 +1,3 @@
+package infrastructure.institution.port
+
+interface CreateInstitutionPort
