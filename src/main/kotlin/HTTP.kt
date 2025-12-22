@@ -14,13 +14,16 @@ fun Application.configureHTTP() {
         }
     }
     install(CORS) {
-        allowMethod(HttpMethod.Options)
+        // Allow requests from frontend origin
+        allowHost("localhost:5173")  // Vite default port
+        allowHeader(HttpHeaders.ContentType)
+        allowHeader(HttpHeaders.Authorization)
+        allowMethod(HttpMethod.Get)
+        allowMethod(HttpMethod.Post)
         allowMethod(HttpMethod.Put)
         allowMethod(HttpMethod.Delete)
-        allowMethod(HttpMethod.Patch)
-        allowHeader(HttpHeaders.Authorization)
-        allowHeader("MyCustomHeader")
-        anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
+        allowMethod(HttpMethod.Options)
+        allowCredentials = true
     }
 //    install(HttpsRedirect) {
 //        // The port to redirect to. By default 443, the default HTTPS port.

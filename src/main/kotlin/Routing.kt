@@ -130,7 +130,7 @@ fun Application.configureRouting() {
                     put("/{id}") { call.respond(agencyHttpHandler.update(call)) }
                     delete("/{id}") { call.respond(agencyHttpHandler.delete(call)) }
                 }
-                route("/institution") {
+                route("/institutions") {
                     get("/{id}") { call.respond(institutionHttpHandler.find(call)) }
                     get { call.respond(institutionHttpHandler.list(call)) }
                     post { call.respond(Created, institutionHttpHandler.create(call)) }
