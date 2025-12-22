@@ -8,6 +8,7 @@ import configureRouting
 import configureSecurity
 import configureSockets
 import configureTemplating
+import configureErrorHandling
 import io.ktor.server.application.*
 
 fun main(args: Array<String>) {
@@ -23,4 +24,5 @@ fun Application.module() {
     configureDatabases()
     configureSockets()
     configureRouting()
+    configureErrorHandling()
 }

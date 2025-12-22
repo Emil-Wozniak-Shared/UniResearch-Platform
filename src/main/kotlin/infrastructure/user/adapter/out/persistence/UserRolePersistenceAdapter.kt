@@ -22,7 +22,9 @@ class UserRolePersistenceAdapter(
 
     override suspend fun list(event: ListUserRolesEvent): ListUserRolesResult = transaction(db) {
         val offset = event.pageable.page * event.pageable.size
-        val query = UserRoles.select(UserRoles.userId eq event.userId)
+        val query = UserRoles
+            .selectAll()
+            .where(UserRoles.userId eq event.userId)
             .limit(event.pageable.size)
             .offset(offset.toLong())
         ListUserRolesResult(query.map { it.toEntity() })

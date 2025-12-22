@@ -23,7 +23,11 @@ data class Pageable(
     val sortBy: String? = null,
     val sortDir: SortDirection = SortDirection.ASC,
     val filters: List<Filter> = emptyList()
-)
+) {
+    companion object {
+        val default = Pageable()
+    }
+}
 
 @Serializable
 enum class SortDirection {

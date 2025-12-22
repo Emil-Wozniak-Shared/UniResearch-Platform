@@ -1,32 +1,21 @@
 package infrastructure.role.adapter.out.persistence
 
 import domain.role.RoleEntity
-import infrastructure.role.model.event.CreateRoleEvent
-import infrastructure.role.model.event.DeleteRoleEvent
-import infrastructure.role.model.event.FindRoleEvent
-import infrastructure.role.model.event.ListRoleEvent
-import infrastructure.role.model.event.UpdateRoleEvent
-import infrastructure.role.model.result.CreateRoleResult
-import infrastructure.role.model.result.DeleteRoleResult
-import infrastructure.role.model.result.FindRoleResult
-import infrastructure.role.model.result.ListRoleResult
-import infrastructure.role.model.result.UpdateRoleResult
+import infrastructure.role.model.event.*
+import infrastructure.role.model.result.*
 import infrastructure.role.port.out.persistence.RolePersistencePort
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 
 class RolePersistenceAdapter(
     private val db: Database
 ) : RolePersistencePort {
 
     override suspend fun find(event: FindRoleEvent): FindRoleResult = transaction(db) {
-        Roles.select ( Roles.id eq event.id )
+        Roles
+            .select(Roles.columns)
+            .where(Roles.id eq event.id)
             .firstOrNull()
             ?.toEntity()
             ?.let { FindRoleResult(it) }

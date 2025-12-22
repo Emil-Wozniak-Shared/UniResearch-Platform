@@ -1,5 +1,7 @@
 package infrastructure.user.model.command
 
+import java.util.UUID
+
 data class FindUserCommand(
-    val id: java.util.UUID
+    val id: UUID
 )

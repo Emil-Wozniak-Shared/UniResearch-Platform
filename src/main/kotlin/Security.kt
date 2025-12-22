@@ -1,13 +1,15 @@
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm.HMAC256
 import infrastructure.auth.model.command.LoginCommand
+import infrastructure.auth.model.command.MeCommand
 import infrastructure.auth.model.request.LoginRequest
 import infrastructure.auth.model.response.LoginResponse
 import infrastructure.auth.port.`in`.http.AuthHttpPort
+import infrastructure.exception.NoPrincipalException
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.HttpStatusCode.Companion.Unauthorized
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.auth.AuthenticationStrategy.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -41,7 +43,8 @@ fun Application.configureSecurity() {
                 }
             }
             challenge { _, _ ->
-                call.respond(Unauthorized, "Token is invalid or expired")
+                this@configureSecurity.log.error("JWT auth failed")
+                call.respond(Unauthorized, "Invalid or expired token")
             }
         }
     }
@@ -52,12 +55,12 @@ fun Application.configureSecurity() {
                 .let {  authHttpPort.login(it) }
                 .run { call.respond(LoginResponse(token)) }
         }
-        authenticate(AUTH_NAME, strategy = Required) {
-            get("/hello") {
-                val principal = call.principal<JWTPrincipal>() ?: error("No JWT principal")
-                val username = principal.payload.getClaim("username").asString()
-                val expiresAt = principal.expiresAt?.time?.minus(System.currentTimeMillis())
-                call.respondText("Hello, $username! Token is expired at $expiresAt ms.")
+        authenticate(AUTH_NAME) {
+            get("/api/me") {
+                val principal = call.principal<JWTPrincipal>() ?: throw NoPrincipalException()
+                MeCommand(principal)
+                    .let { authHttpPort.me(it) }
+                    .let { call.respond(HttpStatusCode.OK, it) }
             }
         }
     }

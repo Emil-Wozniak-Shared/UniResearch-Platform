@@ -85,7 +85,7 @@ fun Application.configureFrameworks() {
             single<RolePermissionHttpPort> { RolePermissionHttpAdapter(get()) }
             single<RolePermissionHttpHandler> { RolePermissionHttpHandler(get()) }
 
-            single<AuthHttpPort> { AuthHttpAdapter(get(), config) }
+            single<AuthHttpPort> { AuthHttpAdapter(get(), get(), get(), config) }
         })
     }
 }
