@@ -1,7 +1,6 @@
-package infrastructure.auth.adapter.persistence
+package infrastructure.auth.adapter.out.persistence
 
 import domain.auth.AuthEntity
-import infrastructure.auth.adapter.persistence.exposed.Auths
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere

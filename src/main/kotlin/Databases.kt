@@ -62,7 +62,7 @@ fun Application.configureDatabases() {
             GrantPublications
         )
 
-        populateTables(db)
+//        populateTables(db)
     }
 }
 

@@ -1,9 +1,7 @@
-package pl.ejdev
-
-import AUTH_NAME
 import common.Pageable
 import common.SortDirection
 import infrastructure.agency.adapter.`in`.http.AgencyHttpHandler
+import infrastructure.exception.InvalidCredentials
 import infrastructure.institution.adapter.http.InstitutionHttpHandler
 import infrastructure.permission.adapter.`in`.http.PermissionHttpHandler
 import infrastructure.permission.adapter.`in`.http.RolePermissionHttpHandler
@@ -11,7 +9,6 @@ import infrastructure.role.adapter.`in`.http.RoleHttpHandler
 import infrastructure.university.adapter.`in`.http.UniversityHttpHandler
 import infrastructure.user.adapter.`in`.http.UserHttpHandler
 import infrastructure.user.adapter.`in`.http.UserRoleHttpHandler
-import infrastructure.user.port.`in`.http.UserRoleHttpPort
 import infrastructure.utils.routing.id
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.HttpStatusCode.Companion.Created
@@ -24,10 +21,21 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.openapi.*
 import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.plugins.statuspages.*
+import io.ktor.server.request.uri
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import org.koin.ktor.ext.inject
+
+@Serializable
+data class ProblemDetail(
+    val type: String = "",
+    val title: String,
+    val status: Int,
+    val detail: String? = null,
+    val instance: String? = null
+)
 
 fun Application.configureRouting() {
     install(ContentNegotiation) {
@@ -44,7 +52,28 @@ fun Application.configureRouting() {
         }
     }
     install(StatusPages) {
-        exception<Throwable> { call, cause -> call.respondText(text = "500: $cause", status = InternalServerError) }
+        exception<InvalidCredentials> { call, cause ->
+            call.respond(
+                HttpStatusCode.BadRequest,
+                ProblemDetail(
+                    title = "Invalid credentials",
+                    status = HttpStatusCode.BadRequest.value,
+                    detail = cause.message,
+                    instance = call.request.uri
+                )
+            )
+        }
+        exception<Throwable> { call, cause ->
+            call.respond(
+                InternalServerError,
+                ProblemDetail(
+                    title = "Internal Server Error",
+                    status = InternalServerError.value,
+                    detail = cause.message ?: "Unexpected error",
+                    instance = call.request.uri
+                )
+            )
+        }
     }
     routing {
         val agencyHttpHandler: AgencyHttpHandler by inject()

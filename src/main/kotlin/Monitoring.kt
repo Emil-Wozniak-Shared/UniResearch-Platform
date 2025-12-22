@@ -1,5 +1,3 @@
-package pl.ejdev
-
 import dev.hayden.KHealth
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -9,8 +7,7 @@ import io.ktor.server.plugins.calllogging.*
 fun Application.configureMonitoring() {
     install(CallId) {
         header(HttpHeaders.XRequestId)
-        verify { callId: String -> callId.isNotEmpty()
-        }
+        verify { it.isNotEmpty() }
     }
     install(KHealth)
     install(CallLogging) {

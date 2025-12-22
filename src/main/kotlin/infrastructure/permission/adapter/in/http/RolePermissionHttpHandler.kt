@@ -13,7 +13,7 @@ import infrastructure.permission.model.result.UpdateRolePermissionResult
 import infrastructure.permission.port.`in`.http.RolePermissionHttpPort
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.request.receive
-import pl.ejdev.toPageable
+import toPageable
 import java.util.UUID
 
 private const val ROLE_ID = "roleId"

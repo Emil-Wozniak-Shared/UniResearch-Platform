@@ -1,4 +1,4 @@
-package infrastructure.auth.adapter.persistence.exposed
+package infrastructure.auth.adapter.out.persistence
 
 import org.jetbrains.exposed.sql.Table
 

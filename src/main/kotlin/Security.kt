@@ -1,7 +1,9 @@
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm.HMAC256
+import infrastructure.auth.model.command.LoginCommand
 import infrastructure.auth.model.request.LoginRequest
 import infrastructure.auth.model.response.LoginResponse
+import infrastructure.auth.port.`in`.http.AuthHttpPort
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.HttpStatusCode.Companion.Unauthorized
 import io.ktor.server.application.*
@@ -11,6 +13,7 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.koin.ktor.ext.inject
 import java.util.*
 
 const val AUTH_NAME = "auth-jwt"
@@ -20,6 +23,8 @@ fun Application.configureSecurity() {
     val issuer = environment.config.property("jwt.issuer").getString()
     val audience = environment.config.property("jwt.audience").getString()
     val realm = environment.config.property("jwt.realm").getString()
+
+    val authHttpPort: AuthHttpPort by inject()
     authentication {
         jwt(AUTH_NAME) {
             this.realm = realm
@@ -44,14 +49,10 @@ fun Application.configureSecurity() {
     }
     routing {
         post("/api/login") {
-            val user = call.receive<LoginRequest>()
-            val token = JWT.create()
-                .withAudience(audience)
-                .withIssuer(issuer)
-                .withClaim("username", user.username)
-                .withExpiresAt(Date(System.currentTimeMillis() + 60000))
-                .sign(HMAC256(secret))
-            call.respond(LoginResponse(token))
+            call.receive<LoginRequest>()
+                .let { (username, password) -> LoginCommand(username, password) }
+                .let {  authHttpPort.login(it) }
+                .run { call.respond(LoginResponse(token)) }
         }
         authenticate(AUTH_NAME, strategy = Required) {
             get("/hello") {

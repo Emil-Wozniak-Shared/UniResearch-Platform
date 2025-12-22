@@ -8,7 +8,7 @@ import infrastructure.permission.model.command.UpdatePermissionCommand
 import infrastructure.permission.port.`in`.http.PermissionHttpPort
 import io.ktor.server.request.receive
 import io.ktor.server.routing.RoutingCall
-import pl.ejdev.toPageable
+import toPageable
 import java.util.UUID
 
 class PermissionHttpHandler(private val httpPort: PermissionHttpPort) {

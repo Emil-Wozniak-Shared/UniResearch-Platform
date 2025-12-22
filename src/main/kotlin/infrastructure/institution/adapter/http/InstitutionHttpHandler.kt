@@ -14,7 +14,7 @@ import infrastructure.institution.port.`in`.http.InstitutionHttpPort
 import infrastructure.utils.routing.id
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.request.receive
-import pl.ejdev.toPageable
+import toPageable
 
 class InstitutionHttpHandler(
     private val institutionHttpPort: InstitutionHttpPort

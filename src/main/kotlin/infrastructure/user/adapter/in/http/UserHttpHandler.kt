@@ -6,7 +6,7 @@ import infrastructure.user.port.`in`.http.UserHttpPort
 import infrastructure.utils.routing.id
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
-import pl.ejdev.toPageable
+import toPageable
 
 class UserHttpHandler(private val userHttpPort: UserHttpPort) {
 

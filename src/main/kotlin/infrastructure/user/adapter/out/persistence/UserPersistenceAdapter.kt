@@ -1,16 +1,16 @@
 package infrastructure.user.adapter.out.persistence
 
+import common.Filter
+import common.FilterOp
 import domain.user.UserEntity
-import infrastructure.user.model.event.CreateUserEvent
-import infrastructure.user.model.event.DeleteUserEvent
-import infrastructure.user.model.event.FindUserEvent
-import infrastructure.user.model.event.ListUserEvent
-import infrastructure.user.model.event.UpdateUserEvent
+import infrastructure.user.model.event.*
 import infrastructure.user.model.result.*
 import infrastructure.user.port.out.persistence.UserPersistencePort
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.util.*
 
 class UserPersistenceAdapter(
     private val db: Database
@@ -26,12 +26,15 @@ class UserPersistenceAdapter(
 
     override suspend fun list(event: ListUserEvent): ListUserResult = transaction(db) {
         val (pageable) = event
-        Users.selectAll().count()
         val offset = pageable.page * pageable.size
-
         val query = Users.selectAll()
             .limit(pageable.size)
             .offset(offset.toLong())
+            .apply {
+                if (pageable.filters.isNotEmpty()) {
+                    adjustWhere { buildUserFilters(pageable.filters) }
+                }
+            }
 
         val entities = query.map { it.toEntity() }
 
@@ -73,5 +76,39 @@ class UserPersistenceAdapter(
         passwordHash = this[Users.passwordHash],
         researcherId = this[Users.researcherId]
     )
+
+    @Suppress("UNCHECKED_CAST")
+    private fun buildUserFilters(filters: List<Filter>): Op<Boolean> {
+        val ops: List<Op<Boolean>> = filters.mapNotNull { (field, op, value) ->
+            val column = filterColumns[field] ?: return@mapNotNull null
+
+            when (op) {
+                FilterOp.EQ -> {
+                    when (column.columnType) {
+                        is UUIDColumnType -> (column as Column<UUID>) eq UUID.fromString(value)
+                        is VarCharColumnType,
+                        is TextColumnType -> (column as Column<String>) eq value
+
+                        else -> null
+                    }
+                }
+                FilterOp.LIKE -> {
+                    when (column.columnType) {
+                        is UUIDColumnType -> (column as Column<UUID>) eq UUID.fromString(value)
+                        is VarCharColumnType,
+                        is TextColumnType -> (column as Column<String>) like "%$value%"
+
+                        else -> null
+                    }
+                }
+            }
+
+        }
+
+        return ops.reduceOrNull { acc, op -> acc and op } ?: Op.TRUE
+    }
+
+    private val filterColumns: Map<String, Column<*>> = Users.columns.associateBy { it.name }
+
 
 }

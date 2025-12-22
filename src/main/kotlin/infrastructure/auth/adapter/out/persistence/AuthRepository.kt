@@ -1,4 +1,4 @@
-package infrastructure.auth.adapter.persistence
+package infrastructure.auth.adapter.out.persistence
 
 import domain.auth.AuthEntity
 import common.Pageable

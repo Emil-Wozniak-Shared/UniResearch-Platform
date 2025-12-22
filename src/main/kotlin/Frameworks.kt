@@ -1,6 +1,8 @@
 import infrastructure.agency.adapter.`in`.http.AgencyHttpAdapter
 import infrastructure.agency.adapter.`in`.http.AgencyHttpHandler
 import infrastructure.agency.port.`in`.http.AgencyHttpPort
+import infrastructure.auth.adapter.`in`.http.AuthHttpAdapter
+import infrastructure.auth.port.`in`.http.AuthHttpPort
 import infrastructure.institution.adapter.http.InstitutionHttpAdapter
 import infrastructure.institution.adapter.http.InstitutionHttpHandler
 import infrastructure.institution.adapter.out.persistance.InstitutionPersistenceAdapter
@@ -45,10 +47,12 @@ import pl.ejdev.infrastructure.agency.adapter.out.persistence.AgencyPersistenceA
 import pl.ejdev.infrastructure.agency.port.out.persistence.AgencyPersistencePort
 
 fun Application.configureFrameworks() {
+    val config = this@configureFrameworks.environment.config
     install(Koin) {
         slf4jLogger()
         modules(module {
             single<Database> { database() }
+
             single<AgencyPersistencePort> { AgencyPersistenceAdapter(get()) }
             single<AgencyHttpPort> { AgencyHttpAdapter(get()) }
             single<AgencyHttpHandler> { AgencyHttpHandler(get()) }
@@ -80,6 +84,8 @@ fun Application.configureFrameworks() {
             single<RolePermissionPersistencePort> { RolePermissionPersistenceAdapter(get()) }
             single<RolePermissionHttpPort> { RolePermissionHttpAdapter(get()) }
             single<RolePermissionHttpHandler> { RolePermissionHttpHandler(get()) }
+
+            single<AuthHttpPort> { AuthHttpAdapter(get(), config) }
         })
     }
 }

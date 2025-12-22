@@ -2,7 +2,12 @@ package pl.ejdev
 
 import configureDatabases
 import configureFrameworks
+import configureHTTP
+import configureMonitoring
+import configureRouting
 import configureSecurity
+import configureSockets
+import configureTemplating
 import io.ktor.server.application.*
 
 fun main(args: Array<String>) {

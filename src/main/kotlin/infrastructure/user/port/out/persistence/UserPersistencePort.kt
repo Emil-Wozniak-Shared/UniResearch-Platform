@@ -6,6 +6,7 @@ import infrastructure.user.model.event.FindUserEvent
 import infrastructure.user.model.event.ListUserEvent
 import infrastructure.user.model.event.UpdateUserEvent
 import infrastructure.user.model.result.*
+import org.h2.engine.User
 
 interface UserPersistencePort {
     suspend fun find(event: FindUserEvent): FindUserResult

@@ -8,7 +8,7 @@ import infrastructure.university.port.`in`.http.UniversityHttpPort
 import infrastructure.utils.routing.id
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
-import pl.ejdev.toPageable
+import toPageable
 
 class UniversityHttpHandler(
     private val universityHttpPort: UniversityHttpPort

@@ -6,7 +6,7 @@ import infrastructure.role.port.`in`.http.RoleHttpPort
 import infrastructure.utils.routing.id
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
-import pl.ejdev.toPageable
+import toPageable
 
 class RoleHttpHandler(private val roleHttpPort: RoleHttpPort) {
 

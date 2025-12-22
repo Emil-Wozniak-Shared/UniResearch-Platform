@@ -8,7 +8,7 @@ import infrastructure.user.model.command.UpdateUserRoleCommand
 import infrastructure.user.port.`in`.http.UserRoleHttpPort
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.request.receive
-import pl.ejdev.toPageable
+import toPageable
 import java.util.UUID
 
 class UserRoleHttpHandler(private val httpPort: UserRoleHttpPort) {

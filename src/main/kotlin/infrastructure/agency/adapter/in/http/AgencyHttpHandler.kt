@@ -6,7 +6,7 @@ import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import infrastructure.agency.port.`in`.http.AgencyHttpPort
 import infrastructure.utils.routing.id
-import pl.ejdev.toPageable
+import toPageable
 
 class AgencyHttpHandler(
     private val agencyHttpPort: AgencyHttpPort
