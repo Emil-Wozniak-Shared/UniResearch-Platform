@@ -5,6 +5,8 @@ import common.Pageable
 import common.SortDirection
 import infrastructure.agency.adapter.`in`.http.AgencyHttpHandler
 import infrastructure.institution.adapter.http.InstitutionHttpHandler
+import infrastructure.permission.adapter.`in`.http.PermissionHttpHandler
+import infrastructure.permission.adapter.`in`.http.RolePermissionHttpHandler
 import infrastructure.role.adapter.`in`.http.RoleHttpHandler
 import infrastructure.university.adapter.`in`.http.UniversityHttpHandler
 import infrastructure.user.adapter.`in`.http.UserHttpHandler
@@ -51,6 +53,8 @@ fun Application.configureRouting() {
         val userHttpHandler: UserHttpHandler by inject()
         val roleHttpHandler: RoleHttpHandler by inject()
         val userRoleHandler: UserRoleHttpHandler by inject()
+        val permissionHandler: PermissionHttpHandler by inject()
+        val rolePermissionHandler: RolePermissionHttpHandler by inject()
 
         openAPI(path = "openapi")
         authenticate(AUTH_NAME, strategy = Required) {
@@ -70,12 +74,12 @@ fun Application.configureRouting() {
                     delete("/{id}") { call.respond(userHttpHandler.delete(call)) }
                 }
                 route("/roles") {
-                    route("/permissions") {
-                        get { call.respondText("List all role permissions") }
-                        get("/{roleId}/{permissionId}") { call.respondText("Get rolePermission") }
-                        post { call.respondText("Create rolePermission") }
-                        put("/{roleId}/{permissionId}") { call.respondText("Update rolePermission") }
-                        delete("/{roleId}/{permissionId}") { call.respondText("Delete rolePermission") }
+                    route("/{roleId}/permissions") {
+                        get { call.respond(rolePermissionHandler.list(call)) }
+                        get("/{permissionId}") { call.respond(rolePermissionHandler.find(call)) }
+                        post { call.respond(Created, rolePermissionHandler.create(call)) }
+                        put("/{permissionId}") { call.respond(rolePermissionHandler.update(call)) }
+                        delete("/{permissionId}") { call.respond(rolePermissionHandler.delete(call)) }
                     }
                     get("/{id}") { call.respond(roleHttpHandler.find(call)) }
                     get { call.respond(roleHttpHandler.list(call)) }
@@ -84,11 +88,11 @@ fun Application.configureRouting() {
                     delete("/{id}") { call.respond(roleHttpHandler.delete(call)) }
                 }
                 route("/permissions") {
-                    get { call.respondText("List all permissions") }
-                    get("/{id}") { call.respondText("Get permission ${call.parameters.id}") }
-                    post { call.respondText("Create permission") }
-                    put("/{id}") { call.respondText("Update permission ${call.parameters.id}") }
-                    delete("/{id}") { call.respondText("Delete permission ${call.parameters.id}") }
+                    get { call.respond(permissionHandler.list(call)) }
+                    get("/{id}") { call.respond(permissionHandler.find(call)) }
+                    post { call.respond(Created, permissionHandler.create(call)) }
+                    put("/{id}") { call.respond(permissionHandler.update(call)) }
+                    delete("/{id}") { call.respond(permissionHandler.delete(call)) }
                 }
                 route("/agencies") {
                     get("/{id}") { call.respond(agencyHttpHandler.find(call)) }

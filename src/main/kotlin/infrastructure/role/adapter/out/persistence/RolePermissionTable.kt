@@ -1,7 +1,6 @@
-package infrastructure.rolePermission.adapter.persistence.exposed
+package infrastructure.role.adapter.out.persistence
 
-import infrastructure.permission.adapter.persistence.exposed.Permissions
-import infrastructure.role.adapter.out.persistence.Roles
+import infrastructure.permission.adapter.out.persistence.Permissions
 import org.jetbrains.exposed.sql.Table
 
 object RolePermissions : Table("role_permission") {

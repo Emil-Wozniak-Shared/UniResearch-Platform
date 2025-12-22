@@ -7,7 +7,7 @@ import infrastructure.grant.adapter.persistence.exposed.Grants
 import infrastructure.grantParticipant.adapter.persistence.exposed.GrantParticipants
 import infrastructure.grantPublication.adapter.persistence.exposed.GrantPublications
 import infrastructure.location.adapter.persistence.exposed.Locations
-import infrastructure.permission.adapter.persistence.exposed.Permissions
+import infrastructure.permission.adapter.out.persistence.Permissions
 import infrastructure.publication.adapter.persistence.exposed.Publications
 import infrastructure.publicationAuthor.adapter.persistence.exposed.PublicationAuthors
 import infrastructure.reagent.adapter.persistence.exposed.Reagents
@@ -15,7 +15,7 @@ import infrastructure.researchProgram.adapter.persistence.exposed.ResearchProgra
 import infrastructure.researcher.adapter.persistence.exposed.Researchers
 import infrastructure.researcherExchange.adapter.persistence.exposed.ResearcherExchanges
 import infrastructure.role.adapter.out.persistence.Roles
-import infrastructure.rolePermission.adapter.persistence.exposed.RolePermissions
+import infrastructure.role.adapter.out.persistence.RolePermissions
 import infrastructure.room.adapter.persistence.exposed.Rooms
 import infrastructure.scientificField.adapter.persistence.exposed.ScientificFields
 import infrastructure.university.adapter.out.persistence.exposed.Universities

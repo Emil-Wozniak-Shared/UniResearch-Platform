@@ -6,6 +6,16 @@ import infrastructure.institution.adapter.http.InstitutionHttpHandler
 import infrastructure.institution.adapter.out.persistance.InstitutionPersistenceAdapter
 import infrastructure.institution.port.`in`.http.InstitutionHttpPort
 import infrastructure.institution.port.out.persistance.InstitutionPersistencePort
+import infrastructure.permission.adapter.`in`.http.PermissionHttpAdapter
+import infrastructure.permission.adapter.`in`.http.PermissionHttpHandler
+import infrastructure.permission.adapter.`in`.http.RolePermissionHttpAdapter
+import infrastructure.permission.adapter.`in`.http.RolePermissionHttpHandler
+import infrastructure.permission.adapter.out.persistence.PermissionPersistenceAdapter
+import infrastructure.permission.adapter.out.persistence.RolePermissionPersistenceAdapter
+import infrastructure.permission.port.`in`.http.PermissionHttpPort
+import infrastructure.permission.port.`in`.http.RolePermissionHttpPort
+import infrastructure.permission.port.out.persistence.PermissionPersistencePort
+import infrastructure.permission.port.out.persistence.RolePermissionPersistencePort
 import infrastructure.role.adapter.`in`.http.RoleHttpAdapter
 import infrastructure.role.adapter.`in`.http.RoleHttpHandler
 import infrastructure.role.adapter.out.persistence.RolePersistenceAdapter
@@ -62,6 +72,14 @@ fun Application.configureFrameworks() {
             single<UserRolePersistencePort> { UserRolePersistenceAdapter(get()) }
             single<UserRoleHttpPort> { UserRoleHttpAdapter(get()) }
             single<UserRoleHttpHandler> { UserRoleHttpHandler(get()) }
+
+            single<PermissionPersistencePort> { PermissionPersistenceAdapter(get()) }
+            single<PermissionHttpPort> { PermissionHttpAdapter(get()) }
+            single<PermissionHttpHandler> { PermissionHttpHandler(get()) }
+
+            single<RolePermissionPersistencePort> { RolePermissionPersistenceAdapter(get()) }
+            single<RolePermissionHttpPort> { RolePermissionHttpAdapter(get()) }
+            single<RolePermissionHttpHandler> { RolePermissionHttpHandler(get()) }
         })
     }
 }

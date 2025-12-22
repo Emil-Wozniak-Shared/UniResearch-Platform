@@ -1,7 +1,6 @@
-package infrastructure.permission.adapter.persistence.exposed
+package infrastructure.permission.adapter.out.persistence
 
 import org.jetbrains.exposed.sql.Table
-import java.util.UUID
 
 object Permissions : Table("permission") {
     val id = uuid("id")
