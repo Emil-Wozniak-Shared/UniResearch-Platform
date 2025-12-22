@@ -3,11 +3,10 @@ package infrastructure.publication.adapter.persistence
 import domain.publication.PublicationEntity
 import infrastructure.publication.adapter.persistence.exposed.Publications
 import kotlinx.datetime.toJavaLocalDate
-import kotlinx.html.InputType
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
-import pl.ejdev.common.Pageable
+import common.Pageable
 import java.util.UUID
 
 class ExposedPublicationRepository : PublicationRepository {

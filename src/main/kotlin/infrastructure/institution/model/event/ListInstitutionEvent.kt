@@ -1,9 +1,7 @@
 package infrastructure.institution.model.event
 
-import java.util.UUID
-import pl.ejdev.common.Pageable
-import domain.institution.InstitutionEntity
+import common.Pageable
 
 data class ListInstitutionEvent(
-    val pageable: pl.ejdev.common.Pageable
+    val pageable: Pageable
 )

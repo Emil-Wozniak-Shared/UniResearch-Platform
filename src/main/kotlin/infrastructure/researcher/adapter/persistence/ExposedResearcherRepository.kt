@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
-import pl.ejdev.common.Pageable
+import common.Pageable
 import java.util.*
 
 class ExposedResearcherRepository : ResearcherRepository {

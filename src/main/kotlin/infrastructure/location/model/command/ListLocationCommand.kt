@@ -1,9 +1,7 @@
 package infrastructure.location.model.command
 
-import domain.location.LocationEntity
-import pl.ejdev.common.Pageable
-import java.util.UUID
+import common.Pageable
 
 data class ListLocationCommand(
-    val pageable: pl.ejdev.common.Pageable
+    val pageable: Pageable
 )

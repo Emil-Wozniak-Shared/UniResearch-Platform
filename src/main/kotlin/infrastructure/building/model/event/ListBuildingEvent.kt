@@ -1,9 +1,7 @@
 package infrastructure.building.model.event
 
-import domain.building.BuildingEntity
-import pl.ejdev.common.Pageable
-import java.util.UUID
+import common.Pageable
 
 data class ListBuildingEvent(
-    val pageable: pl.ejdev.common.Pageable
+    val pageable: Pageable
 )

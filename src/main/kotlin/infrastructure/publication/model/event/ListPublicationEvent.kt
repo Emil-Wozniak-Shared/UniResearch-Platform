@@ -1,9 +1,7 @@
 package infrastructure.publication.model.event
 
-import domain.publication.PublicationEntity
-import pl.ejdev.common.Pageable
-import java.util.UUID
+import common.Pageable
 
 data class ListPublicationEvent(
-    val pageable: pl.ejdev.common.Pageable
+    val pageable: Pageable
 )

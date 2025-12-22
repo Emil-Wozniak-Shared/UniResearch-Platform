@@ -2,9 +2,8 @@ package infrastructure.building.adapter.persistence.exposed
 
 import infrastructure.institute.adapter.persistence.exposed.Institutes
 import infrastructure.location.adapter.persistence.exposed.Locations
-import infrastructure.university.adapter.persistence.exposed.Universities
+import infrastructure.university.adapter.out.persistence.exposed.Universities
 import org.jetbrains.exposed.sql.Table
-import java.util.UUID
 
 object Buildings : Table("building") {
     val id = uuid("id")

@@ -1,7 +1,7 @@
 package infrastructure.agency.model.command
 
 import kotlinx.serialization.Serializable
-import pl.ejdev.common.Pageable
+import common.Pageable
 
 @Serializable
 data class ListAgencyCommand(

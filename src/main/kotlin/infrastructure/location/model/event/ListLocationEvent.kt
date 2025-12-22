@@ -1,9 +1,7 @@
 package infrastructure.location.model.event
 
-import domain.location.LocationEntity
-import pl.ejdev.common.Pageable
-import java.util.UUID
+import common.Pageable
 
 data class ListLocationEvent(
-    val pageable: pl.ejdev.common.Pageable
+    val pageable: Pageable
 )

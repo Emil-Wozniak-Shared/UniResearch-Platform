@@ -1,5 +1,7 @@
 package pl.ejdev
 
+import configureFrameworks
+import configureSecurity
 import io.ktor.server.application.*
 
 fun main(args: Array<String>) {

@@ -12,9 +12,11 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.json.Json
 import org.koin.ktor.ext.inject
-import pl.ejdev.common.Pageable
-import pl.ejdev.common.SortDirection
-import pl.ejdev.infrastructure.agency.adapter.`in`.http.AgencyHttpHandler
+import common.Pageable
+import common.SortDirection
+import infrastructure.agency.adapter.`in`.http.AgencyHttpHandler
+import infrastructure.institution.adapter.http.InstitutionHttpHandler
+import infrastructure.university.adapter.`in`.http.UniversityHttpHandler
 import java.util.*
 
 fun Application.configureRouting() {
@@ -36,75 +38,47 @@ fun Application.configureRouting() {
     }
     routing {
         val agencyHttpHandler: AgencyHttpHandler by inject()
+        val universityHttpHandler: UniversityHttpHandler by inject()
+        val institutionHttpHandler: InstitutionHttpHandler by inject()
 
         openAPI(path = "openapi")
         route("/api") {
-            route("/locations") {
-                get {
-                    call.respondText("List all locations")
-                }
-                get("/{id}") {
-                    val id = call.respondText("Missing id")
-                    call.respondText("Get location with id $id")
-                }
-                post {
-                    call.respondText("Create location")
-                }
-                put("/{id}") {
-                    val id = call.respondText("Missing id")
-                    call.respondText("Update location $id")
-                }
-                delete("/{id}") {
-                    val id = call.respondText("Missing id")
-                    call.respondText("Delete location $id")
-                }
-            }
-            route("/scientific/fields") {
-                get { call.respondText("List all scientific fields") }
-                get("/{id}") {
-                    val id = call.id
-                    call.respondText("Missing id"); call.respondText("Get scientific field $id")
-                }
-                post { call.respondText("Create scientific field") }
-                put("/{id}") {
-                    val id = call.id
-                    call.respondText("Missing id"); call.respondText("Update scientific field $id")
-                }
-                delete("/{id}") {
-                    val id = call.id
-                    call.respondText("Missing id"); call.respondText("Delete scientific field $id")
-                }
-            }
             route("/agencies") {
-                get { call.respond(agencyHttpHandler.list(call)) }
                 get("/{id}") { call.respond(agencyHttpHandler.find(call)) }
+                get { call.respond(agencyHttpHandler.list(call)) }
                 post { call.respond(Created, agencyHttpHandler.create(call)) }
                 put("/{id}") { call.respond(agencyHttpHandler.update(call)) }
                 delete("/{id}") { call.respond(agencyHttpHandler.delete(call)) }
             }
+            route("/institution") {
+                get("/{id}") { call.respond(institutionHttpHandler.find(call)) }
+                get { call.respond(institutionHttpHandler.list(call)) }
+                post { call.respond(Created, institutionHttpHandler.create(call)) }
+                put("/{id}") { call.respond(institutionHttpHandler.update(call)) }
+                delete("/{id}") { call.respond(institutionHttpHandler.delete(call)) }
+            }
             route("/universities") {
-                get { call.respondText("List all universities") }
-                get("/{id}") {
-                    val id = call.id
-                    call.respondText("Missing id"); call.respondText("Get university $id")
-                }
-                post { call.respondText("Create university") }
-                put("/{id}") {
-                    val id = call.id
-                    call.respondText("Missing id"); call.respondText("Update university $id")
-                }
-                delete("/{id}") {
-                    val id = call.id
-                    call.respondText("Missing id"); call.respondText("Delete university $id")
-                }
+                get("/{id}") { call.respond(universityHttpHandler.find(call)) }
+                get { call.respond(universityHttpHandler.list(call)) }
+                post { call.respond(Created, universityHttpHandler.create(call)) }
+                put("/{id}") { call.respond(universityHttpHandler.update(call)) }
+                delete("/{id}") { call.respond(universityHttpHandler.delete(call)) }
             }
-            route("/institutes") {
-                get { call.respondText("List all institutes") }
-                get("/{id}") { call.respondText("Get institute ${call.id}") }
-                post { call.respondText("Create institute") }
-                put("/{id}") { call.respondText("Update institute ${call.id}") }
-                delete("/{id}") { call.respondText("Delete institute ${call.id}") }
+            route("/locations") {
+                get { call.respondText("List all locations") }
+                get("/{id}") { call.respondText("Get location with id ${call.id}") }
+                post { call.respondText("Create location") }
+                put("/{id}") { call.respondText("Update location ${call.id}") }
+                delete("/{id}") { call.respondText("Delete location ${call.id}") }
             }
+            route("/scientific/fields") {
+                get { call.respondText("List all scientific fields") }
+                get("/{id}") {call.respondText("Get scientific field ${call.id}") }
+                post { call.respondText("Create scientific field") }
+                put("/{id}") {call.respondText("Update scientific field ${call.id}") }
+                delete("/{id}") {call.respondText("Delete scientific field ${call.id}") }
+            }
+
             route("/researchers") {
                 route("/programs") {
                     get { call.respondText("List all research programs") }

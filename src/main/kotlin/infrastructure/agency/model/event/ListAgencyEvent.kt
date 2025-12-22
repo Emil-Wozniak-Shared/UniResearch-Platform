@@ -1,9 +1,7 @@
 package infrastructure.agency.model.event
 
-import domain.agency.AgencyEntity
-import pl.ejdev.common.Pageable
-import java.util.UUID
+import common.Pageable
 
 data class ListAgencyEvent(
-    val pageable: pl.ejdev.common.Pageable
+    val pageable: Pageable
 )

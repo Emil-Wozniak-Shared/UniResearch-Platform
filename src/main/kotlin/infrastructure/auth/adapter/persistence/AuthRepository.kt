@@ -1,7 +1,7 @@
 package infrastructure.auth.adapter.persistence
 
 import domain.auth.AuthEntity
-import pl.ejdev.common.Pageable
+import common.Pageable
 import java.util.UUID
 
 interface AuthRepository {

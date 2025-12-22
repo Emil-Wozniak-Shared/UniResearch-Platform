@@ -1,9 +1,7 @@
 package infrastructure.publication.model.command
 
-import domain.publication.PublicationEntity
-import pl.ejdev.common.Pageable
-import java.util.UUID
+import common.Pageable
 
 data class ListPublicationCommand(
-    val pageable: pl.ejdev.common.Pageable
+    val pageable: Pageable
 )

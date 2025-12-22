@@ -1,7 +1,7 @@
 package infrastructure.location.adapter.persistence
 
 import domain.location.LocationEntity
-import pl.ejdev.common.Pageable
+import common.Pageable
 import java.util.UUID
 
 interface LocationRepository {

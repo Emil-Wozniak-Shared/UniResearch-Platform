@@ -1,9 +1,7 @@
 package infrastructure.researcher.model.command
 
-import domain.researcher.ResearcherEntity
-import pl.ejdev.common.Pageable
-import java.util.UUID
+import common.Pageable
 
 data class ListResearcherCommand(
-    val pageable: pl.ejdev.common.Pageable
+    val pageable: Pageable
 )

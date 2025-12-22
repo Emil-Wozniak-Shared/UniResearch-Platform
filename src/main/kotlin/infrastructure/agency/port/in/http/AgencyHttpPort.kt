@@ -1,4 +1,4 @@
-package pl.ejdev.infrastructure.agency.port.`in`.http
+package infrastructure.agency.port.`in`.http
 
 import infrastructure.agency.model.event.CreateAgencyEvent
 import infrastructure.agency.model.event.DeleteAgencyEvent

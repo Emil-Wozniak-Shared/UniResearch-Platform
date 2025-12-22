@@ -1,9 +1,7 @@
 package infrastructure.role.model.event
 
-import domain.role.RoleEntity
-import pl.ejdev.common.Pageable
-import java.util.UUID
+import common.Pageable
 
 data class ListRoleEvent(
-    val pageable: pl.ejdev.common.Pageable
+    val pageable: Pageable
 )

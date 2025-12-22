@@ -1,5 +1,3 @@
-package pl.ejdev
-
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import io.ktor.server.application.*

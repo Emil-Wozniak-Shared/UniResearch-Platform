@@ -1,9 +1,7 @@
 package infrastructure.researchProgram.model.event
 
-import domain.researchProgram.ResearchProgramEntity
-import pl.ejdev.common.Pageable
-import java.util.UUID
+import common.Pageable
 
 data class ListResearchProgramEvent(
-    val pageable: pl.ejdev.common.Pageable
+    val pageable: Pageable
 )

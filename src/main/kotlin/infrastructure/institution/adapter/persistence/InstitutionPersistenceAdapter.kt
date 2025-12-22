@@ -1,3 +1,0 @@
-package infrastructure.institution.adapter.persistence
-
-class InstitutionPersistenceAdapter

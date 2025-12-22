@@ -1,9 +1,7 @@
 package infrastructure.scientificField.model.event
 
-import domain.scientificField.ScientificFieldEntity
-import pl.ejdev.common.Pageable
-import java.util.UUID
+import common.Pageable
 
 data class ListScientificFieldEvent(
-    val pageable: pl.ejdev.common.Pageable
+    val pageable: Pageable
 )

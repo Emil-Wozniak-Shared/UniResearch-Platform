@@ -1,4 +1,4 @@
-package pl.ejdev.infrastructure.agency.adapter.`in`.http
+package infrastructure.agency.adapter.`in`.http
 
 import infrastructure.agency.model.command.*
 import infrastructure.agency.model.event.*
@@ -6,7 +6,7 @@ import infrastructure.agency.model.result.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import pl.ejdev.id
-import pl.ejdev.infrastructure.agency.port.`in`.http.AgencyHttpPort
+import infrastructure.agency.port.`in`.http.AgencyHttpPort
 import pl.ejdev.toPageable
 
 class AgencyHttpHandler(
@@ -27,9 +27,10 @@ class AgencyHttpHandler(
             .run { CreateAgencyEvent(entity) }
             .let { agencyHttpPort.create(it) }
 
-    suspend fun update(call: RoutingCall): UpdateAgencyResult = call.receive<UpdateAgencyCommand>()
-        .run { UpdateAgencyEvent(entity) }
-        .let { agencyHttpPort.update(it) }
+    suspend fun update(call: RoutingCall): UpdateAgencyResult =
+        call.receive<UpdateAgencyCommand>()
+            .run { UpdateAgencyEvent(entity) }
+            .let { agencyHttpPort.update(it) }
 
     suspend fun delete(call: RoutingCall): DeleteAgencyResult =
         DeleteAgencyCommand(call.id)

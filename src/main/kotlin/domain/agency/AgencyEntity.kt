@@ -7,7 +7,7 @@ import java.util.UUID
 @Serializable
 data class AgencyEntity(
     @Serializable(with = UUIDSerializer::class)
-    val id: UUID,
+    val id: UUID = UUID.randomUUID(),
     val name: String,
     val type: String,
     val activity: String

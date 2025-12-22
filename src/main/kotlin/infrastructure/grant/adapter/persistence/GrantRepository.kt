@@ -1,7 +1,7 @@
 package infrastructure.grant.adapter.persistence
 
 import domain.grant.GrantEntity
-import pl.ejdev.common.Pageable
+import common.Pageable
 import java.util.UUID
 
 interface GrantRepository {

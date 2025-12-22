@@ -1,9 +1,7 @@
 package infrastructure.reagent.model.command
 
-import domain.reagent.ReagentEntity
-import pl.ejdev.common.Pageable
-import java.util.UUID
+import common.Pageable
 
 data class ListReagentCommand(
-    val pageable: pl.ejdev.common.Pageable
+    val pageable: Pageable
 )

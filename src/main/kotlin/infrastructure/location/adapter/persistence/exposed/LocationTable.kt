@@ -1,8 +1,6 @@
 package infrastructure.location.adapter.persistence.exposed
 
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.kotlin.datetime.date
-import java.util.UUID
 
 object Locations : Table("location") {
     val id = uuid("id")

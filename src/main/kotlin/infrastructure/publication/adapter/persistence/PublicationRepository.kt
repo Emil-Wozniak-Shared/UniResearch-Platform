@@ -1,7 +1,7 @@
 package infrastructure.publication.adapter.persistence
 
 import domain.publication.PublicationEntity
-import pl.ejdev.common.Pageable
+import common.Pageable
 import java.util.UUID
 
 interface PublicationRepository {

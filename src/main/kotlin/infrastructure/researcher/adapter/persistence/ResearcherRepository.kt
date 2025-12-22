@@ -1,7 +1,7 @@
 package infrastructure.researcher.adapter.persistence
 
 import domain.researcher.ResearcherEntity
-import pl.ejdev.common.Pageable
+import common.Pageable
 import java.util.UUID
 
 interface ResearcherRepository {

@@ -1,8 +1,8 @@
 package infrastructure.university.model.result
 
-import domain.university.UniversityEntity
-import java.util.UUID
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class DeleteUniversityResult(
-    val entity: UniversityEntity?
+    val deleted: Boolean,
 )

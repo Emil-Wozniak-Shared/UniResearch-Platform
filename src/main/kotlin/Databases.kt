@@ -19,24 +19,16 @@ import infrastructure.role.adapter.persistence.exposed.Roles
 import infrastructure.rolePermission.adapter.persistence.exposed.RolePermissions
 import infrastructure.room.adapter.persistence.exposed.Rooms
 import infrastructure.scientificField.adapter.persistence.exposed.ScientificFields
-import infrastructure.university.adapter.persistence.exposed.Universities
+import infrastructure.university.adapter.out.persistence.exposed.Universities
 import infrastructure.user.adapter.persistence.exposed.Users
 import infrastructure.userRole.adapter.persistence.exposed.UserRoles
 import io.ktor.server.application.*
-import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.sql.Connection
 import java.sql.DriverManager
 
 fun Application.configureDatabases() {
-    val database = Database.connect(
-        url = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
-        user = "root",
-        driver = "org.h2.Driver",
-        password = "",
-    )
-
     transaction {
         SchemaUtils.create(
             Locations,

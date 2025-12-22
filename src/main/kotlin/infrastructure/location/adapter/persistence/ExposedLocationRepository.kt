@@ -5,7 +5,7 @@ import infrastructure.location.adapter.persistence.exposed.Locations
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
-import pl.ejdev.common.Pageable
+import common.Pageable
 import java.util.UUID
 
 class ExposedLocationRepository : LocationRepository {

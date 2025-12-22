@@ -2,10 +2,9 @@ package infrastructure.researcherExchange.adapter.persistence.exposed
 
 import infrastructure.institute.adapter.persistence.exposed.Institutes
 import infrastructure.researcher.adapter.persistence.exposed.Researchers
-import infrastructure.university.adapter.persistence.exposed.Universities
+import infrastructure.university.adapter.out.persistence.exposed.Universities
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.kotlin.datetime.date
-import java.util.UUID
 
 object ResearcherExchanges : Table("researcher_exchange") {
     val id = uuid("id")

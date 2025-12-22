@@ -1,9 +1,7 @@
 package infrastructure.permission.model.event
 
-import domain.permission.PermissionEntity
-import pl.ejdev.common.Pageable
-import java.util.UUID
+import common.Pageable
 
 data class ListPermissionEvent(
-    val pageable: pl.ejdev.common.Pageable
+    val pageable: Pageable
 )

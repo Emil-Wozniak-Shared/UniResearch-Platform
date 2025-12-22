@@ -1,9 +1,7 @@
 package infrastructure.auth.model.command
 
-import java.util.UUID
-import pl.ejdev.common.Pageable
-import domain.auth.AuthEntity
+import common.Pageable
 
 data class ListAuthCommand(
-    val pageable: pl.ejdev.common.Pageable
+    val pageable: Pageable
 )
