@@ -1,5 +1,6 @@
 import researchersReducer from "./researchersSlice";
 import institutionsReducer from "./institutionsSlice";
+import { configureStore } from "@reduxjs/toolkit";
 
 export const store = configureStore({
     reducer: {

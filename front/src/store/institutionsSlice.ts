@@ -1,6 +1,8 @@
 import axios from "axios";
 import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
 import { type Institution} from "../types/institution.model"
+import api from "../api/api"
+import type { Page } from "../types/page.model";
 
 interface InstitutionsState {
   data: Institution[];
@@ -14,13 +16,14 @@ const initialState: InstitutionsState = {
   error: null,
 };
 
-const API_URL = "http://localhost:8080/api/institutions";
+const API_URL = "/api/institutions";
 
 export const fetchInstitutions = createAsyncThunk(
   "institutions/fetchInstitutions",
   async () => {
-    const response = await axios.get<Institution[]>(API_URL);
-    return response.data;
+    const response = await api.get<Page<Institution>>(API_URL);
+    console.log(response.data);
+    return response.data.content;
   }
 );
 

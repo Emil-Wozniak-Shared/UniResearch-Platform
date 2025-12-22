@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
-import {list} from "../api/institutions";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchInstitutions, Institution } from "../store/institutionsSlice";
-import type { RootState, AppDispatch } from "../store";
+import { fetchInstitutions } from "../store/institutionsSlice";
+import type { RootState, AppDispatch } from "../store/store";
 
 interface Institution {
   id: string;

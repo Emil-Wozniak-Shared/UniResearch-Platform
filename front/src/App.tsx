@@ -6,12 +6,11 @@ import { InstitutionsPage } from './pages/InstitutionsPage';
 import { GrantsPage } from './pages/GrantsPage';
 import { LoginPage } from './pages/LoginPage';
 import { ProfilePage } from "./pages/ProfilePage";
-import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 
 const App = () => (
-    <Provider>
+    <Provider store={store}>
       <BrowserRouter>
         <DashboardLayout>
           <Routes>
