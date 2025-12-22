@@ -1,7 +1,6 @@
 package infrastructure.grant.adapter.persistence
 
 import domain.grant.GrantEntity
-import infrastructure.grant.adapter.persistence.exposed.Grants
 import kotlinx.datetime.toJavaLocalDate
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
