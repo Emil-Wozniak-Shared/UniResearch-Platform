@@ -1,8 +1,10 @@
 package infrastructure.role.model.result
 
 import domain.role.RoleEntity
+import kotlinx.serialization.Serializable
 import java.util.UUID
 
+@Serializable
 data class CreateRoleResult(
-    val entity: domain.role.RoleEntity
+    val entity: RoleEntity
 )

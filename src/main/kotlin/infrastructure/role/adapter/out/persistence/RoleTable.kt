@@ -1,7 +1,6 @@
-package infrastructure.role.adapter.persistence.exposed
+package infrastructure.role.adapter.out.persistence
 
 import org.jetbrains.exposed.sql.Table
-import java.util.UUID
 
 object Roles : Table("role") {
     val id = uuid("id")

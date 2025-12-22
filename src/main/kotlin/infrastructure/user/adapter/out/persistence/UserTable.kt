@@ -1,8 +1,7 @@
-package infrastructure.user.adapter.persistence.exposed
+package infrastructure.user.adapter.out.persistence
 
 import infrastructure.researcher.adapter.persistence.exposed.Researchers
 import org.jetbrains.exposed.sql.Table
-import java.util.UUID
 
 object Users : Table("user") {
     val id = uuid("id")

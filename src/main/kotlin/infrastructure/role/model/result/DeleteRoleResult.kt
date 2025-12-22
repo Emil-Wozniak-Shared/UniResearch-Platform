@@ -1,8 +1,8 @@
 package infrastructure.role.model.result
 
-import domain.role.RoleEntity
-import java.util.UUID
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class DeleteRoleResult(
-    val entity: RoleEntity?
+    val deleted: Boolean
 )

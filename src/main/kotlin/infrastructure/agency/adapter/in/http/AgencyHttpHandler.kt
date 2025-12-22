@@ -5,15 +5,15 @@ import infrastructure.agency.model.event.*
 import infrastructure.agency.model.result.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
-import pl.ejdev.id
 import infrastructure.agency.port.`in`.http.AgencyHttpPort
+import infrastructure.utils.routing.id
 import pl.ejdev.toPageable
 
 class AgencyHttpHandler(
     private val agencyHttpPort: AgencyHttpPort
 ) {
     suspend fun find(call: RoutingCall): FindAgencyResult =
-        FindAgencyCommand(call.id)
+        FindAgencyCommand(call.parameters.id)
             .run { FindAgencyEvent(id) }
             .let { agencyHttpPort.find(it) }
 
@@ -33,7 +33,7 @@ class AgencyHttpHandler(
             .let { agencyHttpPort.update(it) }
 
     suspend fun delete(call: RoutingCall): DeleteAgencyResult =
-        DeleteAgencyCommand(call.id)
+        DeleteAgencyCommand(call.parameters.id)
             .run { DeleteAgencyEvent(id) }
             .let { agencyHttpPort.delete(it) }
 }

@@ -1,8 +1,8 @@
 package infrastructure.user.model.result
 
-import domain.user.UserEntity
-import java.util.UUID
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class DeleteUserResult(
-    val entity: UserEntity?
+    val deleted: Boolean
 )

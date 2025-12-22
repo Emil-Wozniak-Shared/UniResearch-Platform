@@ -1,9 +1,7 @@
-package infrastructure.userRole.adapter.persistence.exposed
+package infrastructure.user.adapter.out.persistence
 
-import infrastructure.role.adapter.persistence.exposed.Roles
-import infrastructure.user.adapter.persistence.exposed.Users
+import infrastructure.role.adapter.out.persistence.Roles
 import org.jetbrains.exposed.sql.Table
-import java.util.UUID
 
 object UserRoles : Table("user_role") {
     val userId = uuid("user_id").references(Users.id)

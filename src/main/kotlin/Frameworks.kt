@@ -6,11 +6,21 @@ import infrastructure.institution.adapter.http.InstitutionHttpHandler
 import infrastructure.institution.adapter.out.persistance.InstitutionPersistenceAdapter
 import infrastructure.institution.port.`in`.http.InstitutionHttpPort
 import infrastructure.institution.port.out.persistance.InstitutionPersistencePort
+import infrastructure.role.adapter.`in`.http.RoleHttpAdapter
+import infrastructure.role.adapter.`in`.http.RoleHttpHandler
+import infrastructure.role.adapter.out.persistence.RolePersistenceAdapter
+import infrastructure.role.port.`in`.http.RoleHttpPort
+import infrastructure.role.port.out.persistence.RolePersistencePort
 import infrastructure.university.adapter.`in`.http.UniversityHttpAdapter
 import infrastructure.university.adapter.`in`.http.UniversityHttpHandler
 import infrastructure.university.adapter.out.persistence.UniversityPersistenceAdapter
 import infrastructure.university.port.`in`.http.UniversityHttpPort
 import infrastructure.university.port.out.persistance.UniversityPersistencePort
+import infrastructure.user.adapter.`in`.http.UserHttpAdapter
+import infrastructure.user.adapter.`in`.http.UserHttpHandler
+import infrastructure.user.adapter.out.persistence.UserPersistenceAdapter
+import infrastructure.user.port.`in`.http.UserHttpPort
+import infrastructure.user.port.out.persistence.UserPersistencePort
 import io.ktor.server.application.*
 import org.jetbrains.exposed.sql.Database
 import org.koin.dsl.module
@@ -35,6 +45,14 @@ fun Application.configureFrameworks() {
             single<InstitutionPersistencePort> { InstitutionPersistenceAdapter(get()) }
             single<InstitutionHttpPort> { InstitutionHttpAdapter(get()) }
             single<InstitutionHttpHandler> { InstitutionHttpHandler(get()) }
+
+            single<UserPersistencePort> { UserPersistenceAdapter(get()) }
+            single<UserHttpPort> { UserHttpAdapter(get()) }
+            single<UserHttpHandler> { UserHttpHandler(get()) }
+
+            single<RolePersistencePort> { RolePersistenceAdapter(get()) }
+            single<RoleHttpPort> { RoleHttpAdapter(get()) }
+            single<RoleHttpHandler> { RoleHttpHandler(get()) }
         })
     }
 }

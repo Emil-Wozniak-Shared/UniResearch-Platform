@@ -5,16 +5,16 @@ import infrastructure.university.model.command.FindUniversityCommand
 import infrastructure.university.model.event.*
 import infrastructure.university.model.result.*
 import infrastructure.university.port.`in`.http.UniversityHttpPort
+import infrastructure.utils.routing.id
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
-import pl.ejdev.id
 import pl.ejdev.toPageable
 
 class UniversityHttpHandler(
     private val universityHttpPort: UniversityHttpPort
 ) {
     suspend fun find(call: RoutingCall): FindUniversityResult =
-        FindUniversityCommand(call.id)
+        FindUniversityCommand(call.parameters.id)
             .run { FindUniversityEvent(id) }
             .let { universityHttpPort.find(it) }
 
@@ -33,6 +33,6 @@ class UniversityHttpHandler(
             .let { universityHttpPort.update(it) }
 
     suspend fun delete(call: RoutingCall): DeleteUniversityResult =
-        DeleteUniversityEvent(call.id)
+        DeleteUniversityEvent(call.parameters.id)
             .let { universityHttpPort.delete(it) }
 }
