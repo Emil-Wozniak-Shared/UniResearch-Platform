@@ -1,7 +1,6 @@
 package infrastructure.researcher.adapter.persistence
 
 import domain.researcher.ResearcherEntity
-import infrastructure.researcher.adapter.persistence.exposed.Researchers
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere

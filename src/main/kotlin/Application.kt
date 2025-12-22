@@ -1,5 +1,6 @@
 package pl.ejdev
 
+import configureDatabases
 import configureFrameworks
 import configureSecurity
 import io.ktor.server.application.*

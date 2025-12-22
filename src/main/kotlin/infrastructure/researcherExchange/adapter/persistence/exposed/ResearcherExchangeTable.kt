@@ -1,7 +1,7 @@
 package infrastructure.researcherExchange.adapter.persistence.exposed
 
 import infrastructure.institution.adapter.out.persistance.Institutions
-import infrastructure.researcher.adapter.persistence.exposed.Researchers
+import infrastructure.researcher.adapter.persistence.Researchers
 import infrastructure.university.adapter.out.persistence.exposed.Universities
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.kotlin.datetime.date

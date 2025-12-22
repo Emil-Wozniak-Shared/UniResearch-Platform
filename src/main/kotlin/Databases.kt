@@ -1,18 +1,17 @@
-package pl.ejdev
-
 import infrastructure.agency.adapter.persistence.exposed.Agencies
 import infrastructure.building.adapter.persistence.exposed.Buildings
 import infrastructure.equipment.adapter.persistence.exposed.Equipment
 import infrastructure.grant.adapter.persistence.exposed.Grants
 import infrastructure.grantParticipant.adapter.persistence.exposed.GrantParticipants
 import infrastructure.grantPublication.adapter.persistence.exposed.GrantPublications
+import infrastructure.institution.adapter.out.persistance.Institutions
 import infrastructure.location.adapter.persistence.exposed.Locations
 import infrastructure.permission.adapter.out.persistence.Permissions
 import infrastructure.publication.adapter.persistence.exposed.Publications
 import infrastructure.publicationAuthor.adapter.persistence.exposed.PublicationAuthors
 import infrastructure.reagent.adapter.persistence.exposed.Reagents
 import infrastructure.researchProgram.adapter.persistence.exposed.ResearchPrograms
-import infrastructure.researcher.adapter.persistence.exposed.Researchers
+import infrastructure.researcher.adapter.persistence.Researchers
 import infrastructure.researcherExchange.adapter.persistence.exposed.ResearcherExchanges
 import infrastructure.role.adapter.out.persistence.Roles
 import infrastructure.role.adapter.out.persistence.RolePermissions
@@ -27,6 +26,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.name
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.ktor.ext.inject
+import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
 
@@ -34,8 +34,12 @@ fun Application.configureDatabases() {
     val db by inject<Database>()
     log.info("Create tables in Database: ${db.name}")
     transaction {
+        db
+    }
+    transaction {
         SchemaUtils.create(
             Locations,
+            Institutions,
             ScientificFields,
             Agencies,
             Universities,
@@ -57,8 +61,27 @@ fun Application.configureDatabases() {
             GrantParticipants,
             GrantPublications
         )
-    }
 
+        populateTables(db)
+    }
+}
+
+private fun Application.populateTables(db: Database) {
+    val sqlFile = File(this::class.java.getResource("/dev-init.sql")!!.toURI())
+
+    if (sqlFile.exists()) {
+        val sqlStatements = sqlFile.readText()
+            .split(";")   // split multiple statements
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+
+        transaction(db) {
+            sqlStatements.forEach { exec(it) }
+        }
+        log.info("Executed dev-init.sql with ${sqlStatements.size} statements")
+    } else {
+        log.warn("SQL file not found: ${sqlFile.absolutePath}")
+    }
 }
 
 fun Application.connectToPostgres(embedded: Boolean): Connection {

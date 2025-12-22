@@ -6,5 +6,5 @@ data class LocationEntity(
     val id: UUID,
     val name: String,
     val type: String,
-    val parentLocationId: UUID
+    val parentLocationId: UUID?
 )

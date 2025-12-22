@@ -1,9 +1,8 @@
 package infrastructure.publicationAuthor.adapter.persistence.exposed
 
 import infrastructure.publication.adapter.persistence.exposed.Publications
-import infrastructure.researcher.adapter.persistence.exposed.Researchers
+import infrastructure.researcher.adapter.persistence.Researchers
 import org.jetbrains.exposed.sql.Table
-import java.util.UUID
 
 object PublicationAuthors : Table("publication_author") {
     val publicationId = uuid("publication_id").references(Publications.id)

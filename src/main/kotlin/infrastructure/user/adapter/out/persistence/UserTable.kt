@@ -1,6 +1,6 @@
 package infrastructure.user.adapter.out.persistence
 
-import infrastructure.researcher.adapter.persistence.exposed.Researchers
+import infrastructure.researcher.adapter.persistence.Researchers
 import org.jetbrains.exposed.sql.Table
 
 object Users : Table("user") {
@@ -9,5 +9,6 @@ object Users : Table("user") {
     val email = varchar("email", 100).uniqueIndex()
     val passwordHash = varchar("password_hash", 255)
     val researcherId = uuid("researcher_id").references(Researchers.id)
+
     override val primaryKey: PrimaryKey = PrimaryKey(id)
 }

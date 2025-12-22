@@ -1,9 +1,8 @@
 package infrastructure.grantParticipant.adapter.persistence.exposed
 
 import infrastructure.grant.adapter.persistence.exposed.Grants
-import infrastructure.researcher.adapter.persistence.exposed.Researchers
+import infrastructure.researcher.adapter.persistence.Researchers
 import org.jetbrains.exposed.sql.Table
-import java.util.UUID
 
 object GrantParticipants : Table("grant_participant") {
     val grantId = uuid("grant_id").references(Grants.id)

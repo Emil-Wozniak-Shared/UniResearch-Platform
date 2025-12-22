@@ -1,4 +1,4 @@
-package infrastructure.researcher.adapter.persistence.exposed
+package infrastructure.researcher.adapter.persistence
 
 import infrastructure.institution.adapter.out.persistance.Institutions
 import infrastructure.university.adapter.out.persistence.exposed.Universities
