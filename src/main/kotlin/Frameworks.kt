@@ -18,9 +18,14 @@ import infrastructure.university.port.`in`.http.UniversityHttpPort
 import infrastructure.university.port.out.persistance.UniversityPersistencePort
 import infrastructure.user.adapter.`in`.http.UserHttpAdapter
 import infrastructure.user.adapter.`in`.http.UserHttpHandler
+import infrastructure.user.adapter.`in`.http.UserRoleHttpAdapter
+import infrastructure.user.adapter.`in`.http.UserRoleHttpHandler
 import infrastructure.user.adapter.out.persistence.UserPersistenceAdapter
+import infrastructure.user.adapter.out.persistence.UserRolePersistenceAdapter
 import infrastructure.user.port.`in`.http.UserHttpPort
+import infrastructure.user.port.`in`.http.UserRoleHttpPort
 import infrastructure.user.port.out.persistence.UserPersistencePort
+import infrastructure.user.port.out.persistence.UserRolePersistencePort
 import io.ktor.server.application.*
 import org.jetbrains.exposed.sql.Database
 import org.koin.dsl.module
@@ -53,6 +58,10 @@ fun Application.configureFrameworks() {
             single<RolePersistencePort> { RolePersistenceAdapter(get()) }
             single<RoleHttpPort> { RoleHttpAdapter(get()) }
             single<RoleHttpHandler> { RoleHttpHandler(get()) }
+
+            single<UserRolePersistencePort> { UserRolePersistenceAdapter(get()) }
+            single<UserRoleHttpPort> { UserRoleHttpAdapter(get()) }
+            single<UserRoleHttpHandler> { UserRoleHttpHandler(get()) }
         })
     }
 }

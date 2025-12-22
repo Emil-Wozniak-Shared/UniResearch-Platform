@@ -8,7 +8,10 @@ import infrastructure.institution.adapter.http.InstitutionHttpHandler
 import infrastructure.role.adapter.`in`.http.RoleHttpHandler
 import infrastructure.university.adapter.`in`.http.UniversityHttpHandler
 import infrastructure.user.adapter.`in`.http.UserHttpHandler
+import infrastructure.user.adapter.`in`.http.UserRoleHttpHandler
+import infrastructure.user.port.`in`.http.UserRoleHttpPort
 import infrastructure.utils.routing.id
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.HttpStatusCode.Companion.Created
 import io.ktor.http.HttpStatusCode.Companion.InternalServerError
 import io.ktor.serialization.kotlinx.json.*
@@ -47,17 +50,18 @@ fun Application.configureRouting() {
         val institutionHttpHandler: InstitutionHttpHandler by inject()
         val userHttpHandler: UserHttpHandler by inject()
         val roleHttpHandler: RoleHttpHandler by inject()
+        val userRoleHandler: UserRoleHttpHandler by inject()
 
         openAPI(path = "openapi")
         authenticate(AUTH_NAME, strategy = Required) {
             route("/api") {
                 route("/users") {
                     route("{userId}/roles") {
-                        get { call.respondText("List all user roles") }
-                        get("/{userId}/{roleId}") { call.respondText("Get userRole") }
-                        post { call.respondText("Create userRole") }
-                        put("/{userId}/{roleId}") { call.respondText("Update userRole") }
-                        delete("/{userId}/{roleId}") { call.respondText("Delete userRole") }
+                        get { call.respond(userRoleHandler.list(call)) }
+                        get("/{roleId}") { call.respond(userRoleHandler.find(call)) }
+                        post { call.respond(Created, userRoleHandler.create(call)) }
+                        put("/{roleId}") { call.respond(userRoleHandler.update(call)) }
+                        delete("/{roleId}") { call.respond(userRoleHandler.delete(call)) }
                     }
                     get("/{id}") { call.respond(userHttpHandler.find(call)) }
                     get { call.respond(userHttpHandler.list(call)) }
