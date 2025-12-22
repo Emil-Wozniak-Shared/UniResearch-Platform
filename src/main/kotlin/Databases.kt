@@ -6,7 +6,6 @@ import infrastructure.equipment.adapter.persistence.exposed.Equipment
 import infrastructure.grant.adapter.persistence.exposed.Grants
 import infrastructure.grantParticipant.adapter.persistence.exposed.GrantParticipants
 import infrastructure.grantPublication.adapter.persistence.exposed.GrantPublications
-import infrastructure.institute.adapter.persistence.exposed.Institutes
 import infrastructure.location.adapter.persistence.exposed.Locations
 import infrastructure.permission.adapter.persistence.exposed.Permissions
 import infrastructure.publication.adapter.persistence.exposed.Publications
@@ -23,19 +22,24 @@ import infrastructure.university.adapter.out.persistence.exposed.Universities
 import infrastructure.user.adapter.persistence.exposed.Users
 import infrastructure.userRole.adapter.persistence.exposed.UserRoles
 import io.ktor.server.application.*
+import kotlinx.css.nav
+import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.name
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.koin.ktor.ext.inject
 import java.sql.Connection
 import java.sql.DriverManager
 
 fun Application.configureDatabases() {
+    val db by inject<Database>()
+    log.info("Create tables in Database: ${db.name}")
     transaction {
         SchemaUtils.create(
             Locations,
             ScientificFields,
             Agencies,
             Universities,
-            Institutes,
             ResearchPrograms,
             Researchers,
             Buildings,

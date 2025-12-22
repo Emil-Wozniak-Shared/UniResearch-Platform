@@ -1,7 +1,6 @@
 import infrastructure.agency.adapter.`in`.http.AgencyHttpAdapter
 import infrastructure.agency.adapter.`in`.http.AgencyHttpHandler
 import infrastructure.agency.port.`in`.http.AgencyHttpPort
-import infrastructure.institute.adapter.http.InstituteHttpAdapter
 import infrastructure.institution.adapter.http.InstitutionHttpAdapter
 import infrastructure.institution.adapter.http.InstitutionHttpHandler
 import infrastructure.institution.adapter.out.persistance.InstitutionPersistenceAdapter
@@ -40,9 +39,15 @@ fun Application.configureFrameworks() {
     }
 }
 
-private fun database(): Database = Database.connect(
-    url = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
-    user = "root",
-    driver = "org.h2.Driver",
-    password = "",
-)
+private fun Application.database(): Database {
+    val url = environment.config.property("database.url").getString()
+    val user = environment.config.property("database.user").getString()
+    val password = environment.config.property("database.password").getString()
+    val driver = environment.config.property("database.driver").getString()
+    return Database.connect(
+        url = url,
+        user = user,
+        driver = driver,
+        password = password,
+    )
+}

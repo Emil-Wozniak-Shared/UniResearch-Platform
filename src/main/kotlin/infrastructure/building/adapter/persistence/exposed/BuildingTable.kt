@@ -1,6 +1,6 @@
 package infrastructure.building.adapter.persistence.exposed
 
-import infrastructure.institute.adapter.persistence.exposed.Institutes
+import infrastructure.institution.adapter.out.persistance.Institutions
 import infrastructure.location.adapter.persistence.exposed.Locations
 import infrastructure.university.adapter.out.persistence.exposed.Universities
 import org.jetbrains.exposed.sql.Table
@@ -11,7 +11,7 @@ object Buildings : Table("building") {
     val address = varchar("address", 255)
     val locationId = uuid("location_id").references(Locations.id)
     val universityId = uuid("university_id").references(Universities.id)
-    val instituteId = uuid("institute_id").references(Institutes.id)
+    val instituteId = uuid("institute_id").references(Institutions.id)
     val area = double("area")
     override val primaryKey: PrimaryKey = PrimaryKey(id)
 }
