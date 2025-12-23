@@ -1,7 +1,7 @@
-package domain.researcherExchange
+package domain.researcher
 
-import java.util.UUID
 import java.time.LocalDate
+import java.util.UUID
 
 data class ResearcherExchangeEntity(
     val id: UUID,

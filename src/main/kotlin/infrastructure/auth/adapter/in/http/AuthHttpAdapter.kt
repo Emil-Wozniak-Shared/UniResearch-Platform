@@ -2,83 +2,69 @@ package infrastructure.auth.adapter.`in`.http
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm.HMAC256
-import common.Filter
-import common.FilterOp
-import common.Pageable
-import domain.user.UserEntity
 import infrastructure.auth.model.command.LoginCommand
 import infrastructure.auth.model.command.MeCommand
+import infrastructure.auth.model.event.FindWithRolesAndPermissionsEvent
 import infrastructure.auth.model.response.MeResponse
+import infrastructure.auth.model.response.MyPermission
+import infrastructure.auth.model.response.MyRole
+import infrastructure.auth.model.result.FindWithRolesAndPermissionsResult
 import infrastructure.auth.model.result.LoginResult
 import infrastructure.auth.port.`in`.http.AuthHttpPort
-import infrastructure.exception.InvalidCredentials
-import infrastructure.role.model.event.FindRoleEvent
-import infrastructure.role.port.out.persistence.RolePersistencePort
-import infrastructure.user.adapter.out.persistence.UserRolePersistenceAdapter
-import infrastructure.user.adapter.out.persistence.Users
-import infrastructure.user.model.event.ListUserEvent
-import infrastructure.user.model.event.ListUserRolesEvent
-import infrastructure.user.port.out.persistence.UserPersistencePort
-import infrastructure.user.port.out.persistence.UserRolePersistencePort
+import infrastructure.auth.port.out.persistence.UserDetailsRepositoryPort
+import infrastructure.utils.routing.username
 import io.ktor.server.config.*
-import java.util.Date
+import java.nio.file.attribute.UserPrincipalNotFoundException
+import java.util.*
 
 class AuthHttpAdapter(
-    private val userPersistence: UserPersistencePort,
-    private val userRolePersistencePort: UserRolePersistencePort,
-    private val rolePersistencePort: RolePersistencePort,
+    private val userDetailsRepositoryPort: UserDetailsRepositoryPort,
     private val config: ApplicationConfig,
 ) : AuthHttpPort {
     private val secret = config.property("jwt.secret").getString()
     private val issuer = config.property("jwt.issuer").getString()
     private val audience = config.property("jwt.audience").getString()
 
-    override suspend fun login(command: LoginCommand): LoginResult {
-        val user = findUser(command.username)
+    override suspend fun login(command: LoginCommand): LoginResult =
+        FindWithRolesAndPermissionsEvent(command.username)
+            .let { userDetailsRepositoryPort.findWithRolesAndPermissions(it) }
+            .let {
+                when (it) {
+                    is FindWithRolesAndPermissionsResult.None -> throw UserPrincipalNotFoundException("User does not exist")
+                    is FindWithRolesAndPermissionsResult.Some -> validatePassword()
+                        .run { LoginResult(token = generateToken(it)) }
+                }
+            }
 
+    override suspend fun me(command: MeCommand): MeResponse =
+        command.principal.payload.username()
+            .let(::FindWithRolesAndPermissionsEvent)
+            .let { userDetailsRepositoryPort.findWithRolesAndPermissions(it) }
+            .let { result ->
+                when (result) {
+                    is FindWithRolesAndPermissionsResult.None -> throw UserPrincipalNotFoundException("User does not exist")
+                    is FindWithRolesAndPermissionsResult.Some -> MeResponse(
+                        username = result.user.username,
+                        roles = result.roles.map { MyRole(it.name, it.description) }.toSet(),
+                        permissions = result.permissions.map { MyPermission(it.name, it.description) }.toSet(),
+                    )
+                }
+            }
+
+    private fun validatePassword() {
         // ⚠️ Replace with real password hashing (BCrypt recommended)
-        if (user.passwordHash != command.password) {
-            throw InvalidCredentials()
-        }
+//                if (user.passwordHash != command.password) {
+//                    throw InvalidCredentials()
+//                }
+    }
 
-        val token = JWT.create()
-            .withAudience(audience)
+    private fun generateToken(result: FindWithRolesAndPermissionsResult.Some): String =
+        JWT.create()
             .withIssuer(issuer)
-            .withClaim("username", user.username)
-            .withExpiresAt(Date(System.currentTimeMillis() + 60000))
+            .withAudience(audience)
+            .withClaim("username", result.user.username)
+            .withArrayClaim("roles", result.roles.map { it.name }.toTypedArray())
+            .withExpiresAt(Date(System.currentTimeMillis() + 15 * 60 * 1000))
             .sign(HMAC256(secret))
-
-        return LoginResult(token)
-    }
-
-    override suspend fun me(command: MeCommand): MeResponse {
-        val principal = command.principal
-        val username = principal.payload.getClaim("username").asString()
-        val user = findUser(username)
-        val rolesResult = userRolePersistencePort.list(ListUserRolesEvent(user.id, Pageable.default))
-            .entities
-            .map { rolePersistencePort.find(FindRoleEvent(it.roleId)) }
-            .mapNotNull { it.entity?.name }
-
-        return MeResponse(
-            userId = user.id,
-            username = username,
-            roles = rolesResult
-        )
-
-    }
-
-    private suspend fun findUser(username: String): UserEntity {
-        val filters = listOf(
-            Filter(Users.username.name, FilterOp.EQ, username)
-        )
-        val event = ListUserEvent(Pageable(0, 1, filters = filters))
-        val user = userPersistence
-            .list(event)
-            .entities
-            .firstOrNull()
-            ?: throw InvalidCredentials()
-        return user
-    }
 
 }

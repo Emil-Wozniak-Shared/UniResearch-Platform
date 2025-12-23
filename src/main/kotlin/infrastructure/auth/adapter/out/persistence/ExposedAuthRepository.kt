@@ -11,8 +11,7 @@ import common.Pageable
 import java.util.*
 
 class ExposedAuthRepository : AuthRepository {
-
-    override fun findById(id: UUID): AuthEntity? =
+    override suspend fun findById(id: UUID): AuthEntity? =
         transaction {
             Auths
                 .select(Auths.columns)
@@ -21,7 +20,7 @@ class ExposedAuthRepository : AuthRepository {
                 .singleOrNull()
         }
 
-    override fun findAll(pageable: Pageable): List<AuthEntity> =
+    override suspend fun findAll(pageable: Pageable): List<AuthEntity> =
         transaction {
             Auths
                 .select(Auths.columns)
@@ -30,7 +29,7 @@ class ExposedAuthRepository : AuthRepository {
                 .map(::toEntity)
         }
 
-    override fun create(entity: AuthEntity): AuthEntity =
+    override suspend fun create(entity: AuthEntity): AuthEntity =
         transaction {
             Auths.insert {
                 it[id] = entity.id
@@ -41,7 +40,7 @@ class ExposedAuthRepository : AuthRepository {
             entity
         }
 
-    override fun update(entity: AuthEntity): AuthEntity =
+    override suspend fun update(entity: AuthEntity): AuthEntity =
         transaction {
             Auths.update({ Auths.id eq entity.id }) {
                 it[id] = entity.id
@@ -49,7 +48,7 @@ class ExposedAuthRepository : AuthRepository {
             entity
         }
 
-    override fun delete(id: UUID): Boolean =
+    override suspend fun delete(id: UUID): Boolean =
         transaction {
             Auths.deleteWhere { Auths.id eq id } > 0
         }

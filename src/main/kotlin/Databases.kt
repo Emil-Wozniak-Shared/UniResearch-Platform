@@ -24,6 +24,7 @@ import io.ktor.server.application.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.name
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.ktor.ext.inject
 import java.io.File
@@ -62,11 +63,17 @@ fun Application.configureDatabases() {
             GrantPublications
         )
 
-//        populateTables(db)
+        populateTables(db)
     }
 }
 
 private fun Application.populateTables(db: Database) {
+    val inserted = transaction {
+        Users.selectAll().count() > 0
+    }
+    if (inserted) {
+        return
+    }
     val sqlFile = File(this::class.java.getResource("/dev-init.sql")!!.toURI())
 
     if (sqlFile.exists()) {

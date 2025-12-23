@@ -1,6 +1,6 @@
 package infrastructure.researcher.model.command
 
-import domain.researcherExchange.ResearcherExchangeEntity
+import domain.researcher.ResearcherExchangeEntity
 
 data class CreateResearcherExchangeCommand(
     val entity: ResearcherExchangeEntity

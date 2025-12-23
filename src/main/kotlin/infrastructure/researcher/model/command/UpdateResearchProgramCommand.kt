@@ -1,6 +1,6 @@
 package infrastructure.researcher.model.command
 
-import domain.researchProgram.ResearchProgramEntity
+import domain.researcher.ResearchProgramEntity
 
 data class UpdateResearchProgramCommand(
     val entity: ResearchProgramEntity

@@ -1,6 +1,6 @@
 package infrastructure.researcher.model.event
 
-import domain.researcherExchange.ResearcherExchangeEntity
+import domain.researcher.ResearcherExchangeEntity
 
 data class CreateResearcherExchangeEvent(
     val entity: ResearcherExchangeEntity

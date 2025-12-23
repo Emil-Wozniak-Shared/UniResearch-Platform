@@ -11,3 +11,14 @@ data class RolePermissionEntity(
     @Serializable(with = UUIDSerializer::class)
     val permissionId: UUID
 )
+
+enum class Role {
+    IT_ADMIN,
+    MINISTRY,
+    UNIVERSITY,
+    ACADEMY_INSTITUTE,
+    DEPARTMENT_UNIT,
+    PUBLIC_USER,
+    AUDITOR,
+    MODERATOR
+}

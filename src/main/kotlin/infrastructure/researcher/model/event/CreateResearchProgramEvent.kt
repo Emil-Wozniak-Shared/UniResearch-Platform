@@ -1,6 +1,6 @@
 package infrastructure.researcher.model.event
 
-import domain.researchProgram.ResearchProgramEntity
+import domain.researcher.ResearchProgramEntity
 
 data class CreateResearchProgramEvent(
     val entity: ResearchProgramEntity

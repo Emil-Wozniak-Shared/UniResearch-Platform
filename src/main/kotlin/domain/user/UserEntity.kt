@@ -12,5 +12,5 @@ data class UserEntity(
     val email: String,
     val passwordHash: String,
     @Serializable(with = UUIDSerializer::class)
-    val researcherId: UUID
+    val researcherId: UUID?
 )

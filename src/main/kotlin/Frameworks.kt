@@ -2,7 +2,9 @@ import infrastructure.agency.adapter.`in`.http.AgencyHttpAdapter
 import infrastructure.agency.adapter.`in`.http.AgencyHttpHandler
 import infrastructure.agency.port.`in`.http.AgencyHttpPort
 import infrastructure.auth.adapter.`in`.http.AuthHttpAdapter
+import infrastructure.auth.adapter.out.persistence.UserDetailsRepositoryAdapter
 import infrastructure.auth.port.`in`.http.AuthHttpPort
+import infrastructure.auth.port.out.persistence.UserDetailsRepositoryPort
 import infrastructure.institution.adapter.http.InstitutionHttpAdapter
 import infrastructure.institution.adapter.http.InstitutionHttpHandler
 import infrastructure.institution.adapter.out.persistance.InstitutionPersistenceAdapter
@@ -85,7 +87,8 @@ fun Application.configureFrameworks() {
             single<RolePermissionHttpPort> { RolePermissionHttpAdapter(get()) }
             single<RolePermissionHttpHandler> { RolePermissionHttpHandler(get()) }
 
-            single<AuthHttpPort> { AuthHttpAdapter(get(), get(), get(), config) }
+            single<UserDetailsRepositoryPort> { UserDetailsRepositoryAdapter(get(), get(), get()) }
+            single<AuthHttpPort> { AuthHttpAdapter(get(), config) }
         })
     }
 }

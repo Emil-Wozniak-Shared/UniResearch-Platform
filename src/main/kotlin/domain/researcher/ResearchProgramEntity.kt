@@ -1,4 +1,4 @@
-package domain.researchProgram
+package domain.researcher
 
 import java.util.UUID
 

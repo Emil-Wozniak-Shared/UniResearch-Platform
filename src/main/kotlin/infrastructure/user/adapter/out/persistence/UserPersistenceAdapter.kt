@@ -3,13 +3,17 @@ package infrastructure.user.adapter.out.persistence
 import common.Filter
 import common.FilterOp
 import domain.user.UserEntity
+import infrastructure.auth.model.event.FindWithRolesAndPermissionsEvent
+import infrastructure.auth.model.result.FindWithRolesAndPermissionsResult
 import infrastructure.user.model.event.*
 import infrastructure.user.model.result.*
 import infrastructure.user.port.out.persistence.UserPersistencePort
+import kotlinx.css.data
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.sql.Connection
 import java.util.*
 
 class UserPersistenceAdapter(
@@ -17,7 +21,9 @@ class UserPersistenceAdapter(
 ) : UserPersistencePort {
 
     override suspend fun find(event: FindUserEvent): FindUserResult = transaction(db) {
-        Users.select(Users.id eq event.id)
+        Users
+            .select(Users.columns)
+            .where(Users.id eq event.id)
             .firstOrNull()
             ?.toEntity()
             ?.let { FindUserResult(it) }
@@ -69,6 +75,20 @@ class UserPersistenceAdapter(
         DeleteUserResult(Users.deleteWhere { Users.id eq id } > 0)
     }
 
+    override suspend fun findBy(event: FindByUserEvent, tx: Transaction): FindByUserResult {
+        return Users
+            .select(Users.columns)
+            .where {
+                when (event) {
+                    is FindByUsername -> Users.username eq event.username
+                }
+            }
+            .firstOrNull()
+            ?.toEntity()
+             ?.let { FindByUserResult(it) }
+            ?: error("User does not exist")
+    }
+
     private fun ResultRow.toEntity() = UserEntity(
         id = this[Users.id],
         username = this[Users.username],
@@ -88,7 +108,6 @@ class UserPersistenceAdapter(
                         is UUIDColumnType -> (column as Column<UUID>) eq UUID.fromString(value)
                         is VarCharColumnType,
                         is TextColumnType -> (column as Column<String>) eq value
-
                         else -> null
                     }
                 }
