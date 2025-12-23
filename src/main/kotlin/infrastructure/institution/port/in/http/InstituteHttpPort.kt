@@ -4,11 +4,13 @@ import infrastructure.institution.model.command.CreateInstitutionCommand
 import infrastructure.institution.model.command.DeleteInstitutionCommand
 import infrastructure.institution.model.command.FindInstitutionCommand
 import infrastructure.institution.model.command.ListInstitutionCommand
+import infrastructure.institution.model.command.PdfInstitutionCommand
 import infrastructure.institution.model.command.UpdateInstitutionCommand
 import infrastructure.institution.model.result.CreateInstitutionResult
 import infrastructure.institution.model.result.DeleteInstitutionResult
 import infrastructure.institution.model.result.FindInstitutionResult
 import infrastructure.institution.model.result.ListInstitutionResult
+import infrastructure.institution.model.result.PdfInstitutionResult
 import infrastructure.institution.model.result.UpdateInstitutionResult
 
 interface InstitutionHttpPort {
@@ -17,4 +19,5 @@ interface InstitutionHttpPort {
     suspend fun create(command: CreateInstitutionCommand): CreateInstitutionResult
     suspend fun update(command: UpdateInstitutionCommand): UpdateInstitutionResult
     suspend fun delete(command: DeleteInstitutionCommand): DeleteInstitutionResult
+    suspend fun pdf(command: PdfInstitutionCommand): PdfInstitutionResult
 }

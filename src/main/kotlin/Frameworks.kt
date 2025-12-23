@@ -1,3 +1,5 @@
+import configuration.pdf.OpenHtmlToPdfCompileEngine
+import configuration.pdf.PdfCompileEngine
 import infrastructure.agency.adapter.`in`.http.AgencyHttpAdapter
 import infrastructure.agency.adapter.`in`.http.AgencyHttpHandler
 import infrastructure.agency.port.`in`.http.AgencyHttpPort
@@ -8,8 +10,10 @@ import infrastructure.auth.port.`in`.http.AuthHttpPort
 import infrastructure.auth.port.out.persistence.UserDetailsRepositoryPort
 import infrastructure.institution.adapter.http.InstitutionHttpAdapter
 import infrastructure.institution.adapter.http.InstitutionHttpHandler
+import infrastructure.institution.adapter.out.pdf.InstitutionPdfAdapter
 import infrastructure.institution.adapter.out.persistance.InstitutionPersistenceAdapter
 import infrastructure.institution.port.`in`.http.InstitutionHttpPort
+import infrastructure.institution.port.out.pdf.InstitutionPdfPort
 import infrastructure.institution.port.out.persistance.InstitutionPersistencePort
 import infrastructure.permission.adapter.`in`.http.PermissionHttpAdapter
 import infrastructure.permission.adapter.`in`.http.PermissionHttpHandler
@@ -56,6 +60,7 @@ fun Application.configureFrameworks() {
         modules(module {
             single<Database> { database() }
             single<BcryptUtil> { BcryptUtil(config) }
+            single<PdfCompileEngine> { OpenHtmlToPdfCompileEngine() }
 
             single<AgencyPersistencePort> { AgencyPersistenceAdapter(get()) }
             single<AgencyHttpPort> { AgencyHttpAdapter(get()) }
@@ -65,8 +70,9 @@ fun Application.configureFrameworks() {
             single<UniversityHttpPort> { UniversityHttpAdapter(get()) }
             single<UniversityHttpHandler> { UniversityHttpHandler(get()) }
 
+            single<InstitutionPdfPort> { InstitutionPdfAdapter(get()) }
             single<InstitutionPersistencePort> { InstitutionPersistenceAdapter(get()) }
-            single<InstitutionHttpPort> { InstitutionHttpAdapter(get()) }
+            single<InstitutionHttpPort> { InstitutionHttpAdapter(get(), get()) }
             single<InstitutionHttpHandler> { InstitutionHttpHandler(get()) }
 
             single<UserPersistencePort> { UserPersistenceAdapter(get()) }

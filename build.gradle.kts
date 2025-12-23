@@ -5,6 +5,8 @@ val kotlin_version: String by project
 val kotlinx_html_version: String by project
 val logback_version: String by project
 val postgres_version: String by project
+val pdfbox: String by project
+val openhtmltopdf: String by project
 
 plugins {
     kotlin("jvm") version "2.2.21"
@@ -51,6 +53,10 @@ dependencies {
     implementation("io.ktor:ktor-server-config-yaml")
     implementation("io.ktor:ktor-serialization-jackson:3.3.2")
     implementation("org.mindrot:jbcrypt:0.4")
+    implementation("org.apache.pdfbox:pdfbox:$pdfbox")
+    implementation("com.openhtmltopdf:openhtmltopdf-core:$openhtmltopdf")
+    implementation("com.openhtmltopdf:openhtmltopdf-pdfbox:$openhtmltopdf")
+
     testImplementation("io.ktor:ktor-server-test-host")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }

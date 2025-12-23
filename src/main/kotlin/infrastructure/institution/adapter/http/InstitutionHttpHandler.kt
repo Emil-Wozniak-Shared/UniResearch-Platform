@@ -6,9 +6,11 @@ import domain.institution.InstitutionEntity
 import infrastructure.institution.model.command.DeleteInstitutionCommand
 import infrastructure.institution.model.command.FindInstitutionCommand
 import infrastructure.institution.model.command.ListInstitutionCommand
+import infrastructure.institution.model.command.PdfInstitutionCommand
 import infrastructure.institution.model.result.CreateInstitutionResult
 import infrastructure.institution.model.result.DeleteInstitutionResult
 import infrastructure.institution.model.result.FindInstitutionResult
+import infrastructure.institution.model.result.PdfInstitutionResult
 import infrastructure.institution.model.result.UpdateInstitutionResult
 import infrastructure.institution.port.`in`.http.InstitutionHttpPort
 import infrastructure.utils.routing.id
@@ -40,4 +42,9 @@ class InstitutionHttpHandler(
     suspend fun delete(call: ApplicationCall): DeleteInstitutionResult =
         DeleteInstitutionCommand(call.parameters.id)
             .let { institutionHttpPort.delete(it) }
+
+    suspend fun report(call: ApplicationCall): PdfInstitutionResult {
+        val type = call.parameters["type"] ?: error("missing param type")
+        return PdfInstitutionCommand(type).let { institutionHttpPort.pdf(it) }
+    }
 }

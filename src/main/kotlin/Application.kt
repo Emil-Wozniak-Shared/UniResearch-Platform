@@ -23,6 +23,6 @@ fun Application.module() {
     configureFrameworks()
     configureDatabases()
     configureSockets()
-    configureRouting()
     configureErrorHandling()
+    configureRouting()
 }

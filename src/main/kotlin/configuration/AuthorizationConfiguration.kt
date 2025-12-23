@@ -1,69 +1,54 @@
 package configuration
 
-import com.auth0.jwt.impl.JWTParser
+import com.auth0.jwt.JWT
 import domain.permission.Permission
-import domain.role.Role
-import domain.user.UserDetails
-import infrastructure.utils.routing.permissions
-import io.ktor.http.*
+import io.ktor.http.HttpHeaders.Authorization
 import io.ktor.http.HttpStatusCode.Companion.Forbidden
 import io.ktor.http.HttpStatusCode.Companion.Unauthorized
 import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
-import kotlinx.coroutines.withContext
+
+private const val AUTHORIZATION_PLUGIN = "AuthorizationPlugin"
+
+val AuthorizationPlugin = createRouteScopedPlugin(AUTHORIZATION_PLUGIN, ::AuthorizationConfig) {
+    onCall { pluginConfig.authorizationOrElse(it) }
+}
 
 class AuthorizationConfig {
-    internal var permissions: Set<Permission> = setOf()
+    private val jwt = JWT()
+
+    private val permissions: MutableSet<Permission> = mutableSetOf()
+
     fun require(vararg permissions: Permission) {
-        this@AuthorizationConfig.permissions = permissions.toSet()
+        this.permissions.addAll(permissions)
     }
-}
 
-val AuthorizationPlugin = createRouteScopedPlugin(
-    name = "AuthorizationPlugin",
-    createConfiguration = ::AuthorizationConfig
-) {
-    onCall { call ->
-        call.request.header(HttpHeaders.Authorization)?.let { authHeader ->
-            JWTParser().parseHeader(authHeader)?.let { header ->
-                header
-            }
+    private fun getPermissions(authHeader: String): Set<Permission> = jwt.decodeJwt(authHeader.substringAfter(BEARER))
+        .getClaim(PERMISSIONS)
+        .asList(String::class.java)
+        .map { Permission.valueOf(it) }
+        .toSet()
+
+    private fun notValid(authHeader: String): Boolean {
+        val userPermissions = getPermissions(authHeader)
+        return permissions.any { it !in userPermissions }
+    }
+
+    suspend fun authorizationOrElse(
+        call: PipelineCall,
+    ) {
+        val header = call.request.header(Authorization)
+        if (header == null) {
+            call.respond(Unauthorized)
         }
-//        validate(call)
-        println("onCall")
-
+        requireNotNull(header).takeIf(this::notValid)?.let { _ ->
+            call.respond(Forbidden)
+        }
     }
-}
 
-private suspend fun OnCallReceiveContext<AuthorizationConfig>.validate(call: PipelineCall) {
-    val user = call.currentUser()
-    if (user == null) {
-        call.respond(Unauthorized)
-        return
+    private companion object {
+        const val BEARER = "Bearer "
+        const val PERMISSIONS = "permissions"
     }
-    val userPermissions = user.permissions
-
-    if (!pluginConfig.permissions.all { it in userPermissions }) {
-        call.respond(
-            Forbidden,
-            "Forbidden for ${call.request.httpMethod.value}"
-        )
-    }
-}
-
-fun PipelineCall.currentUser(): UserDetails? {
-    val jWTPrincipal = principal<JWTPrincipal>()
-    val principal = jWTPrincipal ?: return null
-    return UserDetails(
-        name = principal.payload.getClaim("username").asString(),
-        roles = principal.payload
-            .getClaim("roles")
-            .asList(String::class.java)
-            .map { Role.valueOf(it) }
-            .toSet(),
-        permissions = principal.payload.permissions()
-    )
 }
