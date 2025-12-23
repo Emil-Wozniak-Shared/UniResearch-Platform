@@ -20,5 +20,10 @@ enum class Permission {
     GENERATE_REPORTS,
     APPROVE_CHANGES,
     VIEW_PUBLIC_DATA,
-    AUDIT_LOGS
+    AUDIT_LOGS;
+
+    companion object {
+        val allNotPublic: Array<Permission> =
+            entries.filter { it != VIEW_PUBLIC_DATA }.toTypedArray()
+    }
 }

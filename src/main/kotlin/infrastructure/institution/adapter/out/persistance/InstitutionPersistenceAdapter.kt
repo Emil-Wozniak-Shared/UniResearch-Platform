@@ -13,42 +13,21 @@ class InstitutionPersistenceAdapter(
 ) : InstitutionPersistencePort {
 
     override suspend fun find(event: FindInstitutionEvent): FindInstitutionResult = transaction(db) {
-        val row = Institutions
+        Institutions
             .select(Institutions.columns)
             .where { Institutions.id eq event.id }
             .firstOrNull()
+            ?.let { toEntity(it) }
+            ?.let (::FindInstitutionResult)
             ?: throw NoSuchElementException("Institution not found")
-        FindInstitutionResult(
-            entity = InstitutionEntity(
-                id = row[Institutions.id],
-                name = row[Institutions.name],
-                type = row[Institutions.type],
-                locationId = row[Institutions.locationId],
-                universityId = row[Institutions.universityId],
-                foundedYear = row[Institutions.foundedYear],
-                scientificFieldId = row[Institutions.scientificFieldId]
-            )
-        )
     }
 
     override suspend fun list(event: ListInstitutionEvent): ListInstitutionResult = transaction(db) {
-        val offset = event.pageable.page * event.pageable.size
-        val query = Institutions.selectAll()
+        Institutions.selectAll()
             .limit(event.pageable.size)
-            .offset(offset.toLong())
-
-        val entities = query.map { row ->
-            InstitutionEntity(
-                id = row[Institutions.id],
-                name = row[Institutions.name],
-                type = row[Institutions.type],
-                locationId = row[Institutions.locationId],
-                universityId = row[Institutions.universityId],
-                foundedYear = row[Institutions.foundedYear],
-                scientificFieldId = row[Institutions.scientificFieldId]
-            )
-        }
-        ListInstitutionResult(entities)
+            .offset((event.pageable.page * event.pageable.size).toLong())
+            .map { row -> toEntity(row) }
+            .let (::ListInstitutionResult)
     }
 
     override suspend fun create(event: CreateInstitutionEvent): CreateInstitutionResult = transaction(db) {
@@ -81,4 +60,14 @@ class InstitutionPersistenceAdapter(
         val deletedCount = Institutions.deleteWhere { Institutions.id eq event.id }
         DeleteInstitutionResult(deleted = deletedCount > 0)
     }
+
+    private fun toEntity(row: ResultRow): InstitutionEntity = InstitutionEntity(
+        id = row[Institutions.id],
+        name = row[Institutions.name],
+        type = row[Institutions.type],
+        locationId = row[Institutions.locationId],
+        universityId = row[Institutions.universityId],
+        foundedYear = row[Institutions.foundedYear],
+        scientificFieldId = row[Institutions.scientificFieldId]
+    )
 }

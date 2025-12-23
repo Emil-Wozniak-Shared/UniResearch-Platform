@@ -18,39 +18,40 @@ VALUES ('11111111-aaaa-4aaa-8aaa-111111111111', 'READ_ALL', 'Read all records'),
        ('77777777-aaaa-4aaa-8aaa-777777777777', 'APPROVE_CHANGES', 'Approve changes'),
        ('88888888-bbbb-4bbb-8bbb-888888888888', 'VIEW_PUBLIC_DATA', 'View public data');
 
+-- Plain password: myPassword123
 INSERT INTO "user" (id, username, email, password_hash, researcher_id)
 VALUES
 -- IT_ADMIN
-('a1c1e111-1111-4aaa-8aaa-000000000001', 'it_admin_1', 'it_admin_1@example.com', 'hash', NULL),
-('a1c1e111-1111-4aaa-8aaa-000000000002', 'it_admin_2', 'it_admin_2@example.com', 'hash', NULL),
+('a1c1e111-1111-4aaa-8aaa-000000000001', 'it_admin_1', 'it_admin_1@example.com', '$2a$12$u8eJkT5S4FvW/1ZVf9WvMetTCAMKXiaxZx369cR8y9GRUeenXuKiK', NULL),
+('a1c1e111-1111-4aaa-8aaa-000000000002', 'it_admin_2', 'it_admin_2@example.com', '$2a$12$u8eJkT5S4FvW/1ZVf9WvMetTCAMKXiaxZx369cR8y9GRUeenXuKiK', NULL),
 
 -- MINISTRY
-('a1c1e111-2222-4aaa-8aaa-000000000001', 'ministry_1', 'ministry_1@example.com', 'hash', NULL),
-('a1c1e111-2222-4aaa-8aaa-000000000002', 'ministry_2', 'ministry_2@example.com', 'hash', NULL),
+('a1c1e111-2222-4aaa-8aaa-000000000001', 'ministry_1', 'ministry_1@example.com', '$2a$12$u8eJkT5S4FvW/1ZVf9WvMetTCAMKXiaxZx369cR8y9GRUeenXuKiK', NULL),
+('a1c1e111-2222-4aaa-8aaa-000000000002', 'ministry_2', 'ministry_2@example.com', '$2a$12$u8eJkT5S4FvW/1ZVf9WvMetTCAMKXiaxZx369cR8y9GRUeenXuKiK', NULL),
 
 -- UNIVERSITY
-('a1c1e111-3333-4aaa-8aaa-000000000001', 'university_1', 'university_1@example.com', 'hash', NULL),
-('a1c1e111-3333-4aaa-8aaa-000000000002', 'university_2', 'university_2@example.com', 'hash', NULL),
+('a1c1e111-3333-4aaa-8aaa-000000000001', 'university_1', 'university_1@example.com', '$2a$12$u8eJkT5S4FvW/1ZVf9WvMetTCAMKXiaxZx369cR8y9GRUeenXuKiK', NULL),
+('a1c1e111-3333-4aaa-8aaa-000000000002', 'university_2', 'university_2@example.com', '$2a$12$u8eJkT5S4FvW/1ZVf9WvMetTCAMKXiaxZx369cR8y9GRUeenXuKiK', NULL),
 
 -- ACADEMY_INSTITUTE
-('a1c1e111-4444-4aaa-8aaa-000000000001', 'academy_1', 'academy_1@example.com', 'hash', NULL),
-('a1c1e111-4444-4aaa-8aaa-000000000002', 'academy_2', 'academy_2@example.com', 'hash', NULL),
+('a1c1e111-4444-4aaa-8aaa-000000000001', 'academy_1', 'academy_1@example.com', '$2a$12$u8eJkT5S4FvW/1ZVf9WvMetTCAMKXiaxZx369cR8y9GRUeenXuKiK', NULL),
+('a1c1e111-4444-4aaa-8aaa-000000000002', 'academy_2', 'academy_2@example.com', '$2a$12$u8eJkT5S4FvW/1ZVf9WvMetTCAMKXiaxZx369cR8y9GRUeenXuKiK', NULL),
 
 -- DEPARTMENT_UNIT
-('a1c1e111-5555-4aaa-8aaa-000000000001', 'department_1', 'department_1@example.com', 'hash', NULL),
-('a1c1e111-5555-4aaa-8aaa-000000000002', 'department_2', 'department_2@example.com', 'hash', NULL),
+('a1c1e111-5555-4aaa-8aaa-000000000001', 'department_1', 'department_1@example.com', '$2a$12$u8eJkT5S4FvW/1ZVf9WvMetTCAMKXiaxZx369cR8y9GRUeenXuKiK', NULL),
+('a1c1e111-5555-4aaa-8aaa-000000000002', 'department_2', 'department_2@example.com', '$2a$12$u8eJkT5S4FvW/1ZVf9WvMetTCAMKXiaxZx369cR8y9GRUeenXuKiK', NULL),
 
 -- PUBLIC_USER
-('a1c1e111-6666-4aaa-8aaa-000000000001', 'public_1', 'public_1@example.com', 'hash', NULL),
-('a1c1e111-6666-4aaa-8aaa-000000000002', 'public_2', 'public_2@example.com', 'hash', NULL),
+('a1c1e111-6666-4aaa-8aaa-000000000001', 'public_1', 'public_1@example.com', '$2a$12$u8eJkT5S4FvW/1ZVf9WvMetTCAMKXiaxZx369cR8y9GRUeenXuKiK', NULL),
+('a1c1e111-6666-4aaa-8aaa-000000000002', 'public_2', 'public_2@example.com', '$2a$12$u8eJkT5S4FvW/1ZVf9WvMetTCAMKXiaxZx369cR8y9GRUeenXuKiK', NULL),
 
 -- AUDITOR
-('a1c1e111-7777-4aaa-8aaa-000000000001', 'auditor_1', 'auditor_1@example.com', 'hash', NULL),
-('a1c1e111-7777-4aaa-8aaa-000000000002', 'auditor_2', 'auditor_2@example.com', 'hash', NULL),
+('a1c1e111-7777-4aaa-8aaa-000000000001', 'auditor_1', 'auditor_1@example.com', '$2a$12$u8eJkT5S4FvW/1ZVf9WvMetTCAMKXiaxZx369cR8y9GRUeenXuKiK', NULL),
+('a1c1e111-7777-4aaa-8aaa-000000000002', 'auditor_2', 'auditor_2@example.com', '$2a$12$u8eJkT5S4FvW/1ZVf9WvMetTCAMKXiaxZx369cR8y9GRUeenXuKiK', NULL),
 
 -- MODERATOR
-('a1c1e111-8888-4aaa-8aaa-000000000001', 'moderator_1', 'moderator_1@example.com', 'hash', NULL),
-('a1c1e111-8888-4aaa-8aaa-000000000002', 'moderator_2', 'moderator_2@example.com', 'hash', NULL);
+('a1c1e111-8888-4aaa-8aaa-000000000001', 'moderator_1', 'moderator_1@example.com', '$2a$12$u8eJkT5S4FvW/1ZVf9WvMetTCAMKXiaxZx369cR8y9GRUeenXuKiK', NULL),
+('a1c1e111-8888-4aaa-8aaa-000000000002', 'moderator_2', 'moderator_2@example.com', '$2a$12$u8eJkT5S4FvW/1ZVf9WvMetTCAMKXiaxZx369cR8y9GRUeenXuKiK', NULL);
 
 INSERT INTO "user_role" (user_id, role_id)
 VALUES ('a1c1e111-1111-4aaa-8aaa-000000000001', '9a1f1d6e-3c2a-4e8b-9a9f-111111111111'),

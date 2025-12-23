@@ -1,5 +1,6 @@
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm.HMAC256
+import configuration.AuthorizationPlugin
 import infrastructure.auth.model.command.LoginCommand
 import infrastructure.auth.model.command.MeCommand
 import infrastructure.auth.model.request.LoginRequest
@@ -35,7 +36,10 @@ fun Application.configureSecurity() {
                     .acceptLeeway(15 * 60 * 1000)
                     .build()
             )
-            validate { credential -> JWTPrincipal(credential.payload) }
+            validate { credential ->
+                println("JWT validate called ${credential.payload}")
+                JWTPrincipal(credential.payload)
+            }
             challenge { _, _ -> call.respond(Unauthorized, "Invalid or expired token") }
         }
     }

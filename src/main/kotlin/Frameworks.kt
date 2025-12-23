@@ -1,6 +1,7 @@
 import infrastructure.agency.adapter.`in`.http.AgencyHttpAdapter
 import infrastructure.agency.adapter.`in`.http.AgencyHttpHandler
 import infrastructure.agency.port.`in`.http.AgencyHttpPort
+import infrastructure.auth.adapter.BcryptUtil
 import infrastructure.auth.adapter.`in`.http.AuthHttpAdapter
 import infrastructure.auth.adapter.out.persistence.UserDetailsRepositoryAdapter
 import infrastructure.auth.port.`in`.http.AuthHttpPort
@@ -54,6 +55,7 @@ fun Application.configureFrameworks() {
         slf4jLogger()
         modules(module {
             single<Database> { database() }
+            single<BcryptUtil> { BcryptUtil(config) }
 
             single<AgencyPersistencePort> { AgencyPersistenceAdapter(get()) }
             single<AgencyHttpPort> { AgencyHttpAdapter(get()) }
@@ -88,7 +90,7 @@ fun Application.configureFrameworks() {
             single<RolePermissionHttpHandler> { RolePermissionHttpHandler(get()) }
 
             single<UserDetailsRepositoryPort> { UserDetailsRepositoryAdapter(get(), get(), get()) }
-            single<AuthHttpPort> { AuthHttpAdapter(get(), config) }
+            single<AuthHttpPort> { AuthHttpAdapter(get(), get(), config) }
         })
     }
 }

@@ -1,6 +1,9 @@
 package infrastructure.utils.routing
 
+import AUTH_NAME
 import com.auth0.jwt.interfaces.Payload
+import configuration.AuthorizationPlugin
+import domain.permission.Permission
 import domain.role.Role
 import domain.user.UserDetails
 import io.ktor.http.*
@@ -12,7 +15,6 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.*
-import io.ktor.util.pipeline.*
 import java.util.*
 
 suspend inline fun RoutingCall.respondPdf(bytes: ByteArray, fileName: String) {
@@ -23,19 +25,17 @@ suspend inline fun RoutingCall.respondPdf(bytes: ByteArray, fileName: String) {
     respondOutputStream(contentType = ContentType.Application.Pdf) { this.write(bytes) }
 }
 
+fun Payload.roles() = getClaim("roles").asList(String::class.java)
+    .map { Role.valueOf(it) }
+    .toSet()
+
+fun Payload.permissions() = getClaim("permissions").asList(String::class.java)
+    .map { Permission.valueOf(it) }
+    .toSet()
+
+fun Payload.username(): String = getClaim("username").asString()
 
 fun RoutingCall.i18nResource() = attributes[AttributeKey<ResourceBundle>("I18NLocale")]
-
-fun PipelineContext<Unit, ApplicationCall>.currentUser(): UserDetails? {
-    val principal = call.principal<JWTPrincipal>() ?: return null
-    val id = principal.payload.getClaim("id").asString()
-    val name = principal.payload.username()
-    val roles = principal.payload.roles()
-    return UserDetails(id, name, roles)
-}
-
-fun Payload.roles() = getClaim("roles").asList(String::class.java).map { Role.valueOf(it) }.toSet()
-fun Payload.username(): String = getClaim("username").asString()
 
 val Parameters.id: UUID
     get() = this["id"]

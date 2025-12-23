@@ -5,10 +5,12 @@ ktor:
   deployment:
     port: 8080
 jwt:
-  secret: "secret"
+  secret: 9f3c1a8d7b6e4f209d3a8c7e5b4a2f1e9d8c7b6a5e4f3d2c1b0a9f8e7d6c5
   issuer: "http://0.0.0.0:8080/"
   audience: "http://0.0.0.0:8080/api"
   realm: "UniResearchApi"
+bcrypt:
+  salt: "u8eJkT5S4FvW/1ZVf9WvMe"
 database:
 #  url: "jdbc:postgresql://localhost/default"
 #  user: username
