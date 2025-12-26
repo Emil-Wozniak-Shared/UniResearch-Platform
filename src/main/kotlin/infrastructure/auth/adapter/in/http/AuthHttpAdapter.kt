@@ -2,15 +2,11 @@ package infrastructure.auth.adapter.`in`.http
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm.HMAC256
-import domain.permission.PermissionEntity
-import domain.role.RoleEntity
 import infrastructure.auth.adapter.BcryptUtil
 import infrastructure.auth.model.command.LoginCommand
 import infrastructure.auth.model.command.MeCommand
 import infrastructure.auth.model.event.FindWithRolesAndPermissionsEvent
 import infrastructure.auth.model.response.MeResponse
-import infrastructure.auth.model.response.MyPermission
-import infrastructure.auth.model.response.MyRole
 import infrastructure.auth.model.result.FindWithRolesAndPermissionsResult.None
 import infrastructure.auth.model.result.FindWithRolesAndPermissionsResult.Some
 import infrastructure.auth.model.result.LoginResult
