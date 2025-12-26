@@ -2,6 +2,8 @@ package infrastructure.auth.adapter.`in`.http
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm.HMAC256
+import domain.permission.PermissionEntity
+import domain.role.RoleEntity
 import infrastructure.auth.adapter.BcryptUtil
 import infrastructure.auth.model.command.LoginCommand
 import infrastructure.auth.model.command.MeCommand
@@ -34,8 +36,10 @@ class AuthHttpAdapter(
             .let {
                 when (it) {
                     is FindWithRolesAndPermissionsResult.None -> throw UserPrincipalNotFoundException("User does not exist")
-                    is FindWithRolesAndPermissionsResult.Some -> validatePassword(it.user.passwordHash, command.password)
-                        .run { LoginResult(token = generateToken(it)) }
+                    is FindWithRolesAndPermissionsResult.Some -> validatePassword(
+                        it.user.passwordHash,
+                        command.password
+                    ).run { LoginResult(token = generateToken(it)) }
                 }
             }
 
@@ -48,11 +52,15 @@ class AuthHttpAdapter(
                     is FindWithRolesAndPermissionsResult.None -> throw UserPrincipalNotFoundException("User does not exist")
                     is FindWithRolesAndPermissionsResult.Some -> MeResponse(
                         username = result.user.username,
-                        roles = result.roles.map { MyRole(it.name, it.description) }.toSet(),
-                        permissions = result.permissions.map { MyPermission(it.name, it.description) }.toSet(),
+                        roles = result.roles.map(::toMyRole).toSet(),
+                        permissions = result.permissions.map(::toMyPermission).toSet(),
                     )
                 }
             }
+
+    private fun toMyRole(entity: RoleEntity): MyRole = MyRole(entity.name, entity.description)
+
+    private fun toMyPermission(entity: PermissionEntity): MyPermission = MyPermission(entity.name, entity.description)
 
     private fun validatePassword(passwordHash: String, password: String) {
         if (!bcryptUtil.verify(passwordHash, password)) {
