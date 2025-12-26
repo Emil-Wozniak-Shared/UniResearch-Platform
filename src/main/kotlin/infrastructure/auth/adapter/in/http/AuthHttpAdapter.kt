@@ -55,10 +55,6 @@ class AuthHttpAdapter(
                 }
             }
 
-    private fun toMyRole(entity: RoleEntity): MyRole = MyRole(entity.name, entity.description)
-
-    private fun toMyPermission(entity: PermissionEntity): MyPermission = MyPermission(entity.name, entity.description)
-
     private fun validatePassword(passwordHash: String, password: String) {
         if (!bcryptUtil.verify(passwordHash, password)) {
             throw InvalidCredentials()
