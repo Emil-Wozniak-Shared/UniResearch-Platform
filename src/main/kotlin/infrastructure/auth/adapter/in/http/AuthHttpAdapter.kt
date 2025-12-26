@@ -11,7 +11,8 @@ import infrastructure.auth.model.event.FindWithRolesAndPermissionsEvent
 import infrastructure.auth.model.response.MeResponse
 import infrastructure.auth.model.response.MyPermission
 import infrastructure.auth.model.response.MyRole
-import infrastructure.auth.model.result.FindWithRolesAndPermissionsResult
+import infrastructure.auth.model.result.FindWithRolesAndPermissionsResult.None
+import infrastructure.auth.model.result.FindWithRolesAndPermissionsResult.Some
 import infrastructure.auth.model.result.LoginResult
 import infrastructure.auth.port.`in`.http.AuthHttpPort
 import infrastructure.auth.port.out.persistence.UserDetailsRepositoryPort
@@ -24,7 +25,7 @@ import java.util.*
 class AuthHttpAdapter(
     private val userDetailsRepositoryPort: UserDetailsRepositoryPort,
     private val bcryptUtil: BcryptUtil,
-    private val config: ApplicationConfig,
+    config: ApplicationConfig,
 ) : AuthHttpPort {
     private val secret = config.property("jwt.secret").getString()
     private val issuer = config.property("jwt.issuer").getString()
@@ -35,8 +36,8 @@ class AuthHttpAdapter(
             .let { userDetailsRepositoryPort.findWithRolesAndPermissions(it) }
             .let {
                 when (it) {
-                    is FindWithRolesAndPermissionsResult.None -> throw UserPrincipalNotFoundException("User does not exist")
-                    is FindWithRolesAndPermissionsResult.Some -> validatePassword(
+                    is None -> throw UserPrincipalNotFoundException("User does not exist")
+                    is Some -> validatePassword(
                         it.user.passwordHash,
                         command.password
                     ).run { LoginResult(token = generateToken(it)) }
@@ -49,12 +50,8 @@ class AuthHttpAdapter(
             .let { userDetailsRepositoryPort.findWithRolesAndPermissions(it) }
             .let { result ->
                 when (result) {
-                    is FindWithRolesAndPermissionsResult.None -> throw UserPrincipalNotFoundException("User does not exist")
-                    is FindWithRolesAndPermissionsResult.Some -> MeResponse(
-                        username = result.user.username,
-                        roles = result.roles.map(::toMyRole).toSet(),
-                        permissions = result.permissions.map(::toMyPermission).toSet(),
-                    )
+                    is None -> throw UserPrincipalNotFoundException("User does not exist")
+                    is Some -> MeResponse.from(result)
                 }
             }
 
@@ -68,7 +65,7 @@ class AuthHttpAdapter(
         }
     }
 
-    private fun generateToken(result: FindWithRolesAndPermissionsResult.Some): String =
+    private fun generateToken(result: Some): String =
         JWT.create()
             .withIssuer(issuer)
             .withAudience(audience)
